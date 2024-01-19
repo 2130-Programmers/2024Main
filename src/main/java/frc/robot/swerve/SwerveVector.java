@@ -39,10 +39,10 @@ public class SwerveVector {
      * @return a new SwerveVector with angle(limited) and power(unclamped)
      */
     public static SwerveVector combineVectors(SwerveVector a, SwerveVector b) {
-        //Decompose vectors
+        //Decompose vectors to cartesian coordinates
         double
-        aX = a.getPower() * Math.cos(a.getAngleRadians()), aY = a.getPower() * Math.sin(a.getAngleRadians()),
-        bX = b.getPower() * Math.cos(b.getAngleRadians()), bY = b.getPower() * Math.sin(b.getAngleRadians());
+        aX = a.getMagnitude() * Math.cos(a.getAngleRadians()), aY = a.getMagnitude() * Math.sin(a.getAngleRadians()),
+        bX = b.getMagnitude() * Math.cos(b.getAngleRadians()), bY = b.getMagnitude() * Math.sin(b.getAngleRadians());
 
         //Add coordinates to get new vector
         double mX = aX + bX, mY = aY + bY;
@@ -102,7 +102,7 @@ public class SwerveVector {
      * Returns the power of the vector
      * @return vector power, from 0 to 1
      */
-    public double getPower() {
+    public double getMagnitude() {
         return power;
     }
 
