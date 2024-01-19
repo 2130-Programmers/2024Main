@@ -21,6 +21,17 @@ public class SwerveVector {
         power = 0;
     }
 
+
+    /**
+     * Find the difference in angles of two vectors
+     * @param minuend - the angle to be subtracted from
+     * @param subtrahend - the angle we subtract
+     * @return the difference between the two angles
+     */
+    public static double compareVectorAngles(SwerveVector minuend, SwerveVector subtrahend) {
+        return minuend.getAngleRadians() - subtrahend.getAngleRadians();
+    }
+
     /**
      * Gets the vector angle in degrees
      * @return angle in degrees from 0 to 360
