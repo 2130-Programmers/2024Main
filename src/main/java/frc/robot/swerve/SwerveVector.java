@@ -1,7 +1,5 @@
 package frc.robot.swerve;
 
-import frc.robot.Constants;
-
 public class SwerveVector {
     private double direction, power;
     
@@ -41,8 +39,16 @@ public class SwerveVector {
      * @return a new SwerveVector with angle(limited) and power(unclamped)
      */
     public static SwerveVector combineVectors(SwerveVector a, SwerveVector b) {
-        
-        return null;
+        //Decompose vectors
+        double
+        aX = a.getPower() * Math.cos(a.getAngleRadians()), aY = a.getPower() * Math.sin(a.getAngleRadians()),
+        bX = b.getPower() * Math.cos(b.getAngleRadians()), bY = b.getPower() * Math.sin(b.getAngleRadians());
+
+        //Add coordinates to get new vector
+        double mX = aX + bX, mY = aY + bY;
+
+        //Convert to new vector with direction and magnitude
+        return new SwerveVector(Math.atan(mY/mX), Math.sqrt((mX * mX) + (mY * mY)));
     }
 
     /**
