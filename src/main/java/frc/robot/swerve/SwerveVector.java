@@ -40,8 +40,26 @@ public class SwerveVector {
      * @param b - second vector
      * @return a new SwerveVector with angle(limited) and power(unclamped)
      */
-    public static SwerveVector addVectors(SwerveVector a, SwerveVector b) {
-        return new SwerveVector((a.getAngleRadians()+b.getAngleRadians())%Constants.DriveTrainConstants.PI2, a.getPower() + b.getPower());
+    public static SwerveVector combineVectors(SwerveVector a, SwerveVector b) {
+        
+        return null;
+    }
+
+    /**
+     * Add to angle of vector
+     * @param radsToAdd - amount in radians to add
+     */
+    public void addRadsToAngle(double radsToAdd) {
+        direction += radsToAdd;
+        direction = direction % (Math.PI/2);
+    }
+
+    /**
+     * Multiply the vector by value
+     * @param multBy - the value to multiply the vector by
+     */
+    public void multiplyVector(double multBy) {
+        power *= multBy;
     }
 
     /**
@@ -64,14 +82,14 @@ public class SwerveVector {
      * Sets the vector angle in degrees
      */
     public void setAngleDegrees(double angle){
-        direction = angle / 57.29578;
+        direction = (angle / 57.29578) % (Math.PI/2);
     }
 
     /**
      * Sets the vector angle in degrees
      */
     public void setAngleRadians(double angle){
-        direction = angle;
+        direction = angle % (Math.PI/2);
     }
 
     /**
