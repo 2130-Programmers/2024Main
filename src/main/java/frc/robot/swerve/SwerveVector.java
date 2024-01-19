@@ -1,12 +1,14 @@
 package frc.robot.swerve;
 
+import frc.robot.Constants;
+
 public class SwerveVector {
     private double direction, power;
     
     /**
      * A vector to be passed to a swerve module, contains direction and speed
      * @param direction - value in radians from 0 to 2pi
-     * @param power - power value, from 0 to 1
+     * @param power - power value
      */
     public SwerveVector(double direction, double power) {
         this.direction = direction;
@@ -28,8 +30,18 @@ public class SwerveVector {
      * @param subtrahend - the angle we subtract
      * @return the difference between the two angles
      */
-    public static double compareVectorAngles(SwerveVector minuend, SwerveVector subtrahend) {
+    public static double subVectorAngles(SwerveVector minuend, SwerveVector subtrahend) {
         return minuend.getAngleRadians() - subtrahend.getAngleRadians();
+    }
+
+    /**
+     * Combine two vectors. Angle is capped to 2pi, after that starts over on a new revolution.
+     * @param a - first vector
+     * @param b - second vector
+     * @return a new SwerveVector with angle(limited) and power(unclamped)
+     */
+    public static SwerveVector addVectors(SwerveVector a, SwerveVector b) {
+        return new SwerveVector((a.getAngleRadians()+b.getAngleRadians())%Constants.DriveTrainConstants.PI2, a.getPower() + b.getPower());
     }
 
     /**

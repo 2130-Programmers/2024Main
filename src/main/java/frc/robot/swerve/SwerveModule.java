@@ -22,6 +22,6 @@ public class SwerveModule {
      * @param moduleVector
      */
     public void drive(SwerveVector moduleVector) {
-        double angleError = SwerveVector.compareVectorAngles(currentState, moduleVector);
+        double angleError = SwerveVector.subVectorAngles(currentState, moduleVector);
     }
 }
