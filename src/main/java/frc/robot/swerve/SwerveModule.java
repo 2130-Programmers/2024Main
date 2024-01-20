@@ -34,8 +34,25 @@ public class SwerveModule {
         //Store 
         drivePowers[moduleID] = moduleVector.getMagnitude();
 
+
+
         steerPower = angleError * .01;
 
         
+    }
+    static void scaleMagnitudes(){
+        double highMagnitude = 0; 
+        for(double currentPower : drivePowers){
+            if(currentPower > highMagnitude){
+                highMagnitude = currentPower;
+            }
+
+        }
+        if(highMagnitude > 1){
+            for(int i = 0; i < drivePowers.length; i++){
+                drivePowers[i] = drivePowers[i]/highMagnitude;
+            }
+        }
+
     }
 }
