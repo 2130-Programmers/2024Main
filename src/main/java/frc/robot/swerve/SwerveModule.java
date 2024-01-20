@@ -31,7 +31,7 @@ public class SwerveModule {
         //Calculate error for steer motor
         double angleError = SwerveVector.subVectorAngles(currentState, moduleVector);
 
-        // S
+        //Store 
         drivePowers[moduleID] = moduleVector.getMagnitude();
 
         steerPower = angleError * .01;
