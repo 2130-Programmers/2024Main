@@ -35,5 +35,7 @@ public class SwerveModule {
         drivePowers[moduleID] = moduleVector.getMagnitude();
 
         steerPower = angleError * .01;
+
+        
     }
 }

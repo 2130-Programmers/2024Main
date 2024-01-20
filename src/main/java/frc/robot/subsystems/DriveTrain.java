@@ -4,16 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
   private SwerveModule
-  flModule = new SwerveModule(null, null),
-  frModule = new SwerveModule(null, null),
-  blModule = new SwerveModule(null, null),
-  brModule = new SwerveModule(null, null);
+  flModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 0),
+  frModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 1),
+  blModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 2),
+  brModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 3);
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {}
