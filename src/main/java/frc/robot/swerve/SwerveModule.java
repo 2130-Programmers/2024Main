@@ -3,8 +3,13 @@ package frc.robot.swerve;
 import com.revrobotics.CANSparkMax;
 
 public class SwerveModule {
+    static double[] drivePowers = new double[4];
+
+    private final int moduleID;
     private CANSparkMax rotationMotor, driveMotor;
     private SwerveVector currentState = new SwerveVector();
+
+    private double drivePower, steerPower;
     
     /**
      * Constructs a new class to represent an arbitrary swerve module, in our case with two Can Spark MAX
@@ -12,7 +17,8 @@ public class SwerveModule {
      * @param rotationMotor - for now, should be passed an instance of CANSparkMax class that represents that motor controller
      * @param driveMotor - for now, should be passed an instance of CANSparkMax class that represents that motor controller
      */
-    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor) {
+    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, int moduleID) {
+        this.moduleID = moduleID;
         this.rotationMotor = rotationMotor;
         this.driveMotor = driveMotor;
     }
@@ -22,6 +28,9 @@ public class SwerveModule {
      * @param moduleVector
      */
     public void drive(SwerveVector moduleVector) {
+        //Calculate error for steer motor
         double angleError = SwerveVector.subVectorAngles(currentState, moduleVector);
+
+        steerPower = angleError * .01;
     }
 }
