@@ -1,7 +1,6 @@
 package frc.robot.swerve;
 
 import com.revrobotics.CANSparkMax;
-
 public class SwerveModule {
     private CANSparkMax rotationMotor, driveMotor;
     private SwerveVector currentState = new SwerveVector();
