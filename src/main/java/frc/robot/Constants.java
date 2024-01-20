@@ -21,6 +21,7 @@ public final class Constants {
     public static final double
     BOT_LENGTH = 80,
     BOT_WIDTH = 80,
-    PI2 = Math.PI * 2;
+    PI2 = Math.PI * 2,
+    SWERVE_DEADZONE = Math.PI/12;
   }
 }

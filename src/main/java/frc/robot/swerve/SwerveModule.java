@@ -2,14 +2,17 @@ package frc.robot.swerve;
 
 import com.revrobotics.CANSparkMax;
 
+import frc.robot.Constants;
+
 public class SwerveModule {
-    static double[] drivePowers = new double[4];
+    static double[] drivePowers = new double[4], steerErrors = new double[4];
+    static int bestTurnDirAllModules = 0;
 
     private final int moduleID;
     private CANSparkMax rotationMotor, driveMotor;
     private SwerveVector currentState = new SwerveVector();
 
-    private double drivePower, steerPower;
+    private boolean shouldFlip;
     
     /**
      * Constructs a new class to represent an arbitrary swerve module, in our case with two Can Spark MAX
@@ -28,14 +31,43 @@ public class SwerveModule {
      * @param moduleVector
      */
     public void drive(SwerveVector moduleVector) {
+        int shortestTurnDirection = 0;
+        double steerPower = 0;
+
         //Calculate error for steer motor
         double angleError = SwerveVector.subVectorAngles(currentState, moduleVector);
+        double actualTarget;
 
-        //Store 
+        //Store
         drivePowers[moduleID] = moduleVector.getMagnitude();
+        steerErrors[moduleID] = angleError;
 
-        steerPower = angleError * .01;
+        //Flip code for rotation ONLY
+        //Drivetrain flip handled seperately
 
+        //Decide if this module should flip
+        if(Math.abs(angleError) >= Math.PI/2) shouldFlip = true; else shouldFlip = false;
         
+
+        //Might cause problems when transitioning from a state where it should flip to one where it shouldn't(hopefully not)
+        if(shouldFlip) {
+            //Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
+            actualTarget = (moduleVector.getAngleRadians() + Math.PI) % (Math.PI * 2);
+        }else{
+            actualTarget = moduleVector.getAngleRadians();
+        }
+        
+        if(angleError > Constants.DriveTrainConstants.SWERVE_DEADZONE) {//Needs to move cw
+            shortestTurnDirection = 1;
+        }else if(angleError < -Constants.DriveTrainConstants.SWERVE_DEADZONE) {//Needs to move ccw
+            shortestTurnDirection = -1;
+        }else{//Stay in same position
+            shortestTurnDirection = 0;//Just set to 0 to stop turning
+        }
+
+        //Simple proportional feedback loop based on the difference between the module's actual target and current state
+        steerPower = Math.abs(currentState.getAngleRadians() - actualTarget) * shortestTurnDirection * 0.05;
+
+        rotationMotor.set(steerPower);
     }
 }
