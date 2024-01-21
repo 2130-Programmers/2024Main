@@ -16,7 +16,7 @@ public class SwerveModule {
 
     /**
      * Constructs a new class to represent an arbitrary swerve module, in our case
-     * with two Can Spark MAX
+     * with two Can SparkMAX
      * This class handles getting the module to the desired angle and setting power,
      * but no kinematics
      * 
@@ -98,7 +98,7 @@ public class SwerveModule {
         rotationMotor.set(steerPower);
     }
 
-    static void scaleMagnitudes() {
+    public static void scaleMagnitudes() {
         double highMagnitude = 0;
         for (double currentPower : drivePowers) {
             if (currentPower > highMagnitude) {
