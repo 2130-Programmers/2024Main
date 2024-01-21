@@ -76,6 +76,11 @@ public class DriveTrain extends SubsystemBase {
     frModule.drive(frVector);
     blModule.drive(blVector);
     brModule.drive(brVector);
+
+    flModule.applyDrive();
+    frModule.applyDrive();
+    blModule.applyDrive();
+    brModule.applyDrive();
   }
 
   @Override
