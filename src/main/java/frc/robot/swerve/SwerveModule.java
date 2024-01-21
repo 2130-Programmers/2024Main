@@ -1,5 +1,6 @@
 package frc.robot.swerve;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 
 import frc.robot.Constants;
@@ -25,7 +26,7 @@ public class SwerveModule {
      * @param driveMotor    - for now, should be passed an instance of CANSparkMax
      *                      class that represents that motor controller
      */
-    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, int moduleID) {
+    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, CANCoder encoder, int moduleID) {
         this.moduleID = moduleID;
         this.rotationMotor = rotationMotor;
         this.driveMotor = driveMotor;
