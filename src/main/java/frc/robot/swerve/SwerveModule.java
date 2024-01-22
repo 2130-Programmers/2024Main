@@ -1,6 +1,6 @@
 package frc.robot.swerve;
 
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
 import frc.robot.Constants;
@@ -11,6 +11,7 @@ public class SwerveModule {
 
     private final int moduleID;
     private CANSparkMax rotationMotor, driveMotor;
+    private CANcoder encoder;
     private SwerveVector currentState = new SwerveVector();
 
     private boolean shouldFlip;
@@ -26,10 +27,11 @@ public class SwerveModule {
      * @param driveMotor    - for now, should be passed an instance of CANSparkMax
      *                      class that represents that motor controller
      */
-    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, CANCoder encoder, int moduleID) {
+    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, CANcoder encoder, int moduleID) {
         this.moduleID = moduleID;
         this.rotationMotor = rotationMotor;
         this.driveMotor = driveMotor;
+        this.encoder = encoder;
     }
 
     /**
@@ -55,16 +57,13 @@ public class SwerveModule {
      */
     private void steer(double targetSteerAngle) {
         int shortestTurnDirection = 0;
-        double steerPower = 0;
+        double steerPower = 0, actualTarget;
 
         //Update module state
-        currentState.setAngleRadians(0);
+        currentState.setAngleDegrees(encoder.getPosition().getValueAsDouble());
 
         // Calculate error for steer motor
         double angleError = currentState.getAngleRadians() - targetSteerAngle;
-        double actualTarget;
-
-        steerErrors[moduleID] = angleError;
 
         // Flip code for rotation ONLY
         // Drivetrain flip handled seperately
@@ -83,6 +82,8 @@ public class SwerveModule {
         } else {
             actualTarget = targetSteerAngle;
         }
+
+        //Store error to desired position
 
         if (angleError > Constants.DriveTrainConstants.SWERVE_DEADZONE) {// Needs to move cw
             shortestTurnDirection = 1;
