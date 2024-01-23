@@ -39,7 +39,7 @@ public class SwerveModule {
      * 
      * @param moduleVector
      */
-    public void drive(SwerveVector moduleVector) {
+    public void calcDrive(SwerveVector moduleVector) {
         steer(moduleVector.getAngleRadians());
         drivePowers[moduleID] = moduleVector.getMagnitude();
     }
@@ -69,22 +69,24 @@ public class SwerveModule {
         // Drivetrain flip handled seperately
 
         // Decide if this module should flip
-        if (Math.abs(angleError) >= Math.PI / 2)
+        if (Math.abs(angleError) >= Math.PI / 2) {
             shouldFlip = true;
-        else
+        }else{
             shouldFlip = false;
-
+        }
+        
         // Might cause problems when transitioning from a state where it should flip to
         // one where it shouldn't(hopefully not)
         if (shouldFlip) {
             // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
             actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
+            //Reassign error so that it is only the distance to new desired position
+            angleError = currentState.getAngleRadians() - actualTarget;
         } else {
             actualTarget = targetSteerAngle;
         }
 
-        //Store error to desired position
-
+        //Find shortest move direction
         if (angleError > Constants.DriveTrainConstants.SWERVE_DEADZONE) {// Needs to move cw
             shortestTurnDirection = 1;
         } else if (angleError < -Constants.DriveTrainConstants.SWERVE_DEADZONE) {// Needs to move ccw
@@ -92,6 +94,8 @@ public class SwerveModule {
         } else {// Stay in same position
             shortestTurnDirection = 0;// Just set to 0 to stop turning
         }
+
+        //Only remaining thing is to synchronise module turn direction!!!
 
         //Simple proportional feedback loop based on the difference between the
         //module's actual target and current state
