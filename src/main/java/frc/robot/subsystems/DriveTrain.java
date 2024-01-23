@@ -73,10 +73,10 @@ public class DriveTrain extends SubsystemBase {
     brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
 
-    flModule.drive(flVector);
-    frModule.drive(frVector);
-    blModule.drive(blVector);
-    brModule.drive(brVector);
+    flModule.calcDrive(flVector);
+    frModule.calcDrive(frVector);
+    blModule.calcDrive(blVector);
+    brModule.calcDrive(brVector);
 
     SwerveModule.scaleMagnitudes();
 
