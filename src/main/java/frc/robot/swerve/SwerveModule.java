@@ -93,21 +93,26 @@ public class SwerveModule {
             shortestTurnDirection = 0;// Just set to 0 to stop turning
         }
 
-        // Simple proportional feedback loop based on the difference between the
-        // module's actual target and current state
+        //Simple proportional feedback loop based on the difference between the
+        //module's actual target and current state
         steerPower = Math.abs(currentState.getAngleRadians() - actualTarget) * shortestTurnDirection * 0.05;
 
         rotationMotor.set(steerPower);
     }
 
+    //If one module power is greater than 1, divide all modules by the greatest magnitude to scale
     public static void scaleMagnitudes() {
         double highMagnitude = 0;
+
+        //Find greatest magnitude
         for (double currentPower : drivePowers) {
             if (currentPower > highMagnitude) {
                 highMagnitude = currentPower;
             }
 
         }
+
+        //If greatest magnitude is greater than one, divide all
         if (highMagnitude > 1) {
             for (int i = 0; i < drivePowers.length; i++) {
                 drivePowers[i] = drivePowers[i] / highMagnitude;
