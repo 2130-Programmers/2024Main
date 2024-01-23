@@ -5,22 +5,24 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DriveTrain;
 
 public class command extends Command {
   /** Creates a new command. */
   public command() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
+  DriveTrain driveTrain;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
+  public void execute() {
+    driveTrain.calculateKinematics(RobotContainer.driverGamepad.getLeftY(), RobotContainer.driverGamepad.getLeftX(), RobotContainer.driverGamepad.getRightX());
+  }
+    // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
