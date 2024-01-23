@@ -10,10 +10,10 @@ import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
   private SwerveModule
-  flModule = new SwerveModule(null, null),
-  frModule = new SwerveModule(null, null),
-  blModule = new SwerveModule(null, null),
-  brModule = new SwerveModule(null, null);
+  flModule = new SwerveModule(null, null, null, 1),
+  frModule = new SwerveModule(null, null, null, 2),
+  blModule = new SwerveModule(null, null, null, 3),
+  brModule = new SwerveModule(null, null, null, 4);
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {}
@@ -69,10 +69,10 @@ public class DriveTrain extends SubsystemBase {
     brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
 
-    flModule.drive(flVector);
-    frModule.drive(frVector);
-    blModule.drive(blVector);
-    brModule.drive(brVector);
+    flModule.calcDrive(flVector);
+    frModule.calcDrive(frVector);
+    blModule.calcDrive(blVector);
+    brModule.calcDrive(brVector);
 
     SwerveModule.scaleMagnitudes();
 
