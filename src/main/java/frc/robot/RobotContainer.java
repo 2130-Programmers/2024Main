@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -16,7 +18,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // -- SUBSYSTEMS -- \\
+  public static final DriveTrain driveTrain = new DriveTrain();
+
+  // -- COMMANDS  -- \\
+  public static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final CommandXboxController driverGamepad =
@@ -26,6 +32,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    //Set default command so that it runs periodically
+    driveTrain.setDefaultCommand(teleDriveCommand);
   }
 
   /**

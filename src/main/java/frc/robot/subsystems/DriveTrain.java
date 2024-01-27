@@ -16,8 +16,8 @@ public class DriveTrain extends SubsystemBase {
   private SwerveModule
   flModule = new SwerveModule(new CANSparkMax(50, MotorType.kBrushless), new CANSparkMax(51, MotorType.kBrushless), new CANcoder(20), 1),
   frModule = new SwerveModule(new CANSparkMax(52, MotorType.kBrushless), new CANSparkMax(53, MotorType.kBrushless), new CANcoder(21), 2),
-  blModule = new SwerveModule(new CANSparkMax(54, MotorType.kBrushless), new CANSparkMax(54, MotorType.kBrushless), new CANcoder(22), 3),
-  brModule = new SwerveModule(new CANSparkMax(56, MotorType.kBrushless), new CANSparkMax(55, MotorType.kBrushless), new CANcoder(23), 4);
+  blModule = new SwerveModule(new CANSparkMax(54, MotorType.kBrushless), new CANSparkMax(55, MotorType.kBrushless), new CANcoder(22), 3),
+  brModule = new SwerveModule(new CANSparkMax(56, MotorType.kBrushless), new CANSparkMax(75, MotorType.kBrushless), new CANcoder(23), 4);
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {}
