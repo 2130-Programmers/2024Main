@@ -4,24 +4,21 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
   private SwerveModule
-  flModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 0),
-  frModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 1),
-  blModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 2),
-  brModule = new SwerveModule(new CANSparkMax(0, MotorType.kBrushless), new CANSparkMax(0, MotorType.kBrushless), 3);
+  flModule = new SwerveModule(null, null, null, 1),
+  frModule = new SwerveModule(null, null, null, 2),
+  blModule = new SwerveModule(null, null, null, 3),
+  brModule = new SwerveModule(null, null, null, 4);
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {}
 
-  //Asssuming robot is square
+  //Assuming robot is square
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 
   public void calculateKinematics(double x, double y, double r) {
@@ -72,10 +69,10 @@ public class DriveTrain extends SubsystemBase {
     brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
 
-    flModule.drive(flVector);
-    frModule.drive(frVector);
-    blModule.drive(blVector);
-    brModule.drive(brVector);
+    flModule.calcDrive(flVector);
+    frModule.calcDrive(frVector);
+    blModule.calcDrive(blVector);
+    brModule.calcDrive(brVector);
 
     SwerveModule.scaleMagnitudes();
 

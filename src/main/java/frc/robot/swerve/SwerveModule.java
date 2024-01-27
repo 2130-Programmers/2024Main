@@ -1,6 +1,6 @@
 package frc.robot.swerve;
 
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
 import frc.robot.Constants;
@@ -11,6 +11,7 @@ public class SwerveModule {
 
     private final int moduleID;
     private CANSparkMax rotationMotor, driveMotor;
+    private CANcoder encoder;
     private SwerveVector currentState = new SwerveVector();
     
 
@@ -27,10 +28,11 @@ public class SwerveModule {
      * @param driveMotor    - for now, should be passed an instance of CANSparkMax
      *                      class that represents that motor controller
      */
-    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, CANCoder encoder, int moduleID) {
+    public SwerveModule(CANSparkMax rotationMotor, CANSparkMax driveMotor, CANcoder encoder, int moduleID) {
         this.moduleID = moduleID;
         this.rotationMotor = rotationMotor;
         this.driveMotor = driveMotor;
+        this.encoder = encoder;
     }
 
     /**
@@ -38,7 +40,7 @@ public class SwerveModule {
      * 
      * @param moduleVector
      */
-    public void drive(SwerveVector moduleVector) {
+    public void calcDrive(SwerveVector moduleVector) {
         steer(moduleVector.getAngleRadians());
         drivePowers[moduleID] = moduleVector.getMagnitude();
     }
@@ -56,35 +58,36 @@ public class SwerveModule {
      */
     private void steer(double targetSteerAngle) {
         int shortestTurnDirection = 0;
-        double steerPower = 0;
+        double steerPower = 0, actualTarget;
 
         //Update module state
-        currentState.setAngleRadians(0);
+        currentState.setAngleDegrees(encoder.getPosition().getValueAsDouble());
 
         // Calculate error for steer motor
         double angleError = currentState.getAngleRadians() - targetSteerAngle;
-        double actualTarget;
-
-        steerErrors[moduleID] = angleError;
 
         // Flip code for rotation ONLY
         // Drivetrain flip handled seperately
 
         // Decide if this module should flip
-        if (Math.abs(angleError) >= Math.PI / 2)
+        if (Math.abs(angleError) >= Math.PI / 2) {
             shouldFlip = true;
-        else
+        }else{
             shouldFlip = false;
-
+        }
+        
         // Might cause problems when transitioning from a state where it should flip to
         // one where it shouldn't(hopefully not)
         if (shouldFlip) {
             // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
             actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
+            //Reassign error so that it is only the distance to new desired position
+            angleError = currentState.getAngleRadians() - actualTarget;
         } else {
             actualTarget = targetSteerAngle;
         }
 
+        //Find shortest move direction
         if (angleError > Constants.DriveTrainConstants.SWERVE_DEADZONE) {// Needs to move cw
             shortestTurnDirection = 1;
         } else if (angleError < -Constants.DriveTrainConstants.SWERVE_DEADZONE) {// Needs to move ccw
@@ -93,21 +96,28 @@ public class SwerveModule {
             shortestTurnDirection = 0;// Just set to 0 to stop turning
         }
 
-        // Simple proportional feedback loop based on the difference between the
-        // module's actual target and current state
+        //Only remaining thing is to synchronise module turn direction!!!
+
+        //Simple proportional feedback loop based on the difference between the
+        //module's actual target and current state
         steerPower = Math.abs(currentState.getAngleRadians() - actualTarget) * shortestTurnDirection * 0.05;
 
         rotationMotor.set(steerPower);
     }
 
+    //If one module power is greater than 1, divide all modules by the greatest magnitude to scale
     public static void scaleMagnitudes() {
         double highMagnitude = 0;
+
+        //Find greatest magnitude
         for (double currentPower : drivePowers) {
             if (currentPower > highMagnitude) {
                 highMagnitude = currentPower;
             }
 
         }
+
+        //If greatest magnitude is greater than one, divide all
         if (highMagnitude > 1) {
             for (int i = 0; i < drivePowers.length; i++) {
                 drivePowers[i] = drivePowers[i] / highMagnitude;
