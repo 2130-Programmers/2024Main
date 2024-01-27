@@ -12,6 +12,7 @@ public class SwerveModule {
     private final int moduleID;
     private CANSparkMax rotationMotor, driveMotor;
     private SwerveVector currentState = new SwerveVector();
+    
 
     private boolean shouldFlip;
 
