@@ -13,19 +13,39 @@ import frc.robot.Constants;
 import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
-  private SwerveModule
-  flModule = new SwerveModule(new CANSparkMax(50, MotorType.kBrushless), new CANSparkMax(51, MotorType.kBrushless), new CANcoder(20), 1),
-  frModule = new SwerveModule(new CANSparkMax(52, MotorType.kBrushless), new CANSparkMax(53, MotorType.kBrushless), new CANcoder(21), 2),
-  blModule = new SwerveModule(new CANSparkMax(54, MotorType.kBrushless), new CANSparkMax(55, MotorType.kBrushless), new CANcoder(22), 3),
-  brModule = new SwerveModule(new CANSparkMax(56, MotorType.kBrushless), new CANSparkMax(75, MotorType.kBrushless), new CANcoder(23), 4);
+  private static CANcoder
+  flEncoder = new CANcoder(20),
+  frEncoder = new CANcoder(21),
+  blEncoder = new CANcoder(22),
+  brEncoder = new CANcoder(23);
+
+  private static SwerveModule flModule, frModule, blModule, brModule;
+
+  private static SwerveModule[] moduleArray = {flModule, frModule, blModule, brModule};
 
   /** Creates a new DriveTrain. */
-  public DriveTrain() {}
+  public DriveTrain() {
+    flModule = new SwerveModule(new CANSparkMax(10, MotorType.kBrushless), new CANSparkMax(11, MotorType.kBrushless), flEncoder, 0);
+    frModule = new SwerveModule(new CANSparkMax(12, MotorType.kBrushless), new CANSparkMax(13, MotorType.kBrushless), frEncoder, 1);
+    blModule = new SwerveModule(new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15, MotorType.kBrushless), blEncoder, 2);
+    brModule = new SwerveModule(new CANSparkMax(16, MotorType.kBrushless), new CANSparkMax(17, MotorType.kBrushless), brEncoder, 3);
+  }
 
   //Assuming robot is square
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 
   public void calculateKinematics(double x, double y, double r) {
+
+    // if(Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE && Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE && Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) {
+    //   for(SwerveModule module : moduleArray) {
+    //     module.stopModule(true);
+    //   }
+    // }else{
+    //   for(SwerveModule module : moduleArray) {
+    //     module.stopModule(false);
+    //   }
+    // }
+
     /*
      * Simply put, swerve takes a vector for velocity and an angular rotation component as inputs.
      * This function simply handles passing target values to each module(solving kinematics but not coordinating fip/rotations)
@@ -73,10 +93,12 @@ public class DriveTrain extends SubsystemBase {
     brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
 
-    flModule.calcDrive(flVector);
+    SwerveVector temp = new SwerveVector(2, .1);
+
+    // flModule.calcDrive(flVector);
     frModule.calcDrive(frVector);
-    blModule.calcDrive(blVector);
-    brModule.calcDrive(brVector);
+    // blModule.calcDrive(temp);
+    // brModule.calcDrive(temp);
 
     SwerveModule.scaleMagnitudes();
 

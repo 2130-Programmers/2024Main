@@ -3,6 +3,7 @@ package frc.robot.swerve;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -12,10 +13,9 @@ public class SwerveModule {
     private final int moduleID;
     private CANSparkMax rotationMotor, driveMotor;
     private CANcoder encoder;
-    private SwerveVector currentState = new SwerveVector();
-    
+    private SwerveVector currentState = new SwerveVector();    
 
-    private boolean shouldFlip;
+    private boolean shouldFlip = false, stopModule = false;
 
     /**
      * Constructs a new class to represent an arbitrary swerve module, in our case
@@ -36,20 +36,38 @@ public class SwerveModule {
     }
 
     /**
+     * Enable/disable swerve module
+     * @param shouldStop - true if module should stop
+     */
+    public void stopModule(boolean shouldStop) {
+        stopModule = shouldStop;
+    }
+
+    /**
      * Move module to target angle and calculate power
      * 
      * @param moduleVector
      */
     public void calcDrive(SwerveVector moduleVector) {
-        steer(moduleVector.getAngleRadians());
-        drivePowers[moduleID] = moduleVector.getMagnitude();
+        if(!stopModule) {
+            steer(moduleVector.getAngleRadians());
+            drivePowers[moduleID] = moduleVector.getMagnitude();
+        }
+
+        SmartDashboard.putNumber("Module " + moduleID + " encoder raw", encoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("Module " + moduleID + " encoder position", encoder.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Module " + moduleID + " target angle", moduleVector.getAngleDegrees());
     }
 
     /**
      * Apply calculated power to drive motor
      */
     public void applyDrive() {
-        driveMotor.set(drivePowers[moduleID]);
+        if(!stopModule) {
+            driveMotor.set(drivePowers[moduleID]);
+        }else{
+            driveMotor.set(0);
+        }
     }
 
     /**
@@ -61,10 +79,11 @@ public class SwerveModule {
         double steerPower = 0, actualTarget;
 
         //Update module state
-        currentState.setAngleDegrees(encoder.getPosition().getValueAsDouble());
+        currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
 
         // Calculate error for steer motor
         double angleError = currentState.getAngleRadians() - targetSteerAngle;
+        SmartDashboard.putNumber("Module " + moduleID + " error", angleError);
 
         // Flip code for rotation ONLY
         // Drivetrain flip handled seperately
@@ -96,11 +115,13 @@ public class SwerveModule {
             shortestTurnDirection = 0;// Just set to 0 to stop turning
         }
 
+        SmartDashboard.putNumber("Module " + moduleID + " shortestTurnDirection", shortestTurnDirection);
+
         //Only remaining thing is to synchronise module turn direction!!!
 
         //Simple proportional feedback loop based on the difference between the
         //module's actual target and current state
-        steerPower = Math.abs(currentState.getAngleRadians() - actualTarget) * shortestTurnDirection * 0.05;
+        steerPower = Math.abs(angleError) * shortestTurnDirection * 0.05;
 
         rotationMotor.set(steerPower);
     }
