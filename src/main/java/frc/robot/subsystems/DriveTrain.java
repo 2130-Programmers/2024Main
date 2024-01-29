@@ -70,9 +70,9 @@ public class DriveTrain extends SubsystemBase {
     //Vectors or lines from the origin to each swerve module. We can later change the origin to allow rotation around points other than the center of the robot
     final SwerveVector
     frPositionVector = new SwerveVector(Math.PI/4, moduleDistFromCenter),
-    flPositionVector = new SwerveVector((Math.PI*3)/4, moduleDistFromCenter),
-    blPositionVector = new SwerveVector((Math.PI*5)/4, moduleDistFromCenter),
-    brPositionVector = new SwerveVector((Math.PI*7)/4, moduleDistFromCenter);
+    flPositionVector = new SwerveVector(Math.PI*3/4, moduleDistFromCenter),
+    blPositionVector = new SwerveVector(Math.PI*5/4, moduleDistFromCenter),
+    brPositionVector = new SwerveVector(Math.PI*7/4, moduleDistFromCenter);
 
     //A vector perpendicular to the positionVector of each module, with a strength proportional to how much we want the robot to turn
     //This will be the rotation component of each module's calculation
@@ -95,10 +95,10 @@ public class DriveTrain extends SubsystemBase {
 
     SwerveVector temp = new SwerveVector(2, .1);
 
-    // flModule.calcDrive(flVector);
+    flModule.calcDrive(flVector);
     frModule.calcDrive(frVector);
-    // blModule.calcDrive(temp);
-    // brModule.calcDrive(temp);
+    blModule.calcDrive(blVector);
+    brModule.calcDrive(brVector);
 
     SwerveModule.scaleMagnitudes();
 
