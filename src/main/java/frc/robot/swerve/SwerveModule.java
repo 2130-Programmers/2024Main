@@ -49,10 +49,8 @@ public class SwerveModule {
      * @param moduleVector
      */
     public void calcDrive(SwerveVector moduleVector) {
-        if(!stopModule) {
-            steer(moduleVector.getAngleRadians());
-            drivePowers[moduleID] = moduleVector.getMagnitude();
-        }
+        steer(moduleVector.getAngleRadians());
+        drivePowers[moduleID] = moduleVector.getMagnitude();
 
         SmartDashboard.putNumber("Module " + moduleID + " encoder raw", encoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("Module " + moduleID + " encoder position", encoder.getPosition().getValueAsDouble());
@@ -81,8 +79,8 @@ public class SwerveModule {
         //Update module state
         currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
 
-        // Calculate error for steer motor
-        double angleError = currentState.getAngleRadians() - targetSteerAngle;
+        // Calculate error for steer motor - error is positive if the module should move ccw
+        double angleError = targetSteerAngle - currentState.getAngleRadians();
         SmartDashboard.putNumber("Module " + moduleID + " error", angleError);
 
         // Flip code for rotation ONLY
@@ -101,7 +99,7 @@ public class SwerveModule {
             // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
             actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
             //Reassign error so that it is only the distance to new desired position
-            angleError = currentState.getAngleRadians() - actualTarget;
+            angleError = actualTarget - currentState.getAngleRadians();
         } else {
             actualTarget = targetSteerAngle;
         }
