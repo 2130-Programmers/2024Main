@@ -22,7 +22,7 @@ public final class Constants {
     BOT_LENGTH = 80,
     BOT_WIDTH = 80,
     PI2 = Math.PI * 2,
-    SWERVE_DEADZONE = Math.PI/4,
+    SWERVE_DEADZONE = Math.PI/12,
     JOYSTICK_DEADZONE = .05;
   }
 }
