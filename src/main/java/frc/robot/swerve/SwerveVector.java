@@ -39,20 +39,19 @@ public class SwerveVector {
      * @return a new SwerveVector with angle(limited) and power(unclamped)
      */
     public static SwerveVector combineVectors(SwerveVector a, SwerveVector b) {
-        /*
-         * This function works by 
-         */
 
         //Decompose vectors to cartesian coordinates
         double
-        aX = a.getMagnitude() * Math.cos(a.getAngleRadians()), aY = a.getMagnitude() * Math.sin(a.getAngleRadians()),
-        bX = b.getMagnitude() * Math.cos(b.getAngleRadians()), bY = b.getMagnitude() * Math.sin(b.getAngleRadians());
+        aX = a.getMagnitude() * Math.cos(a.getAngleRadians()),
+        aY = a.getMagnitude() * Math.sin(a.getAngleRadians()),
+        bX = b.getMagnitude() * Math.cos(b.getAngleRadians()),
+        bY = b.getMagnitude() * Math.sin(b.getAngleRadians());
 
         //Add cartesian coordinates
         double mX = aX + bX, mY = aY + bY;
 
         //Convert to new vector with direction and magnitude
-        return new SwerveVector(Math.atan(mY/mX), Math.sqrt((mX * mX) + (mY * mY)));
+        return new SwerveVector(Math.atan2(mY, mX), Math.sqrt((mX * mX) + (mY * mY)));
     }
 
     /**

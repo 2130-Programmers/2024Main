@@ -15,7 +15,7 @@ public class SwerveModule {
     private CANcoder encoder;
     private SwerveVector currentState = new SwerveVector();    
 
-    private boolean shouldFlip = false, stopModule = false;
+    private boolean shouldFlip = false;
 
     /**
      * Constructs a new class to represent an arbitrary swerve module, in our case
@@ -35,13 +35,13 @@ public class SwerveModule {
         this.encoder = encoder;
     }
 
-    /**
-     * Enable/disable swerve module
-     * @param shouldStop - true if module should stop
-     */
-    public void stopModule(boolean shouldStop) {
-        stopModule = shouldStop;
-    }
+    // /**
+    //  * Enable/disable swerve module
+    //  * @param shouldStop - true if module should stop
+    //  */
+    // public void stopModule(boolean shouldStop) {
+    //     stopModule = shouldStop;
+    // }
 
     /**
      * Move module to target angle and calculate power
@@ -61,11 +61,7 @@ public class SwerveModule {
      * Apply calculated power to drive motor
      */
     public void applyDrive() {
-        if(!stopModule) {
-            driveMotor.set(drivePowers[moduleID]);
-        }else{
-            driveMotor.set(0);
-        }
+        driveMotor.set(drivePowers[moduleID]);
     }
 
     /**
