@@ -21,7 +21,6 @@ public class DriveTrain extends SubsystemBase {
 
   private static SwerveModule flModule, frModule, blModule, brModule;
 
-  private static SwerveModule[] moduleArray = {flModule, frModule, blModule, brModule};
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
@@ -88,10 +87,10 @@ public class DriveTrain extends SubsystemBase {
     SwerveVector translationVector = new SwerveVector(Math.atan2(y, x), Math.sqrt((x * x) + (y * y)));
 
     //Combine the translation and rotation components for each module
-    frVector = SwerveVector.combineVectors(translationVector, frRotationVector);
     flVector = SwerveVector.combineVectors(translationVector, flRotationVector);
-    brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
+    frVector = SwerveVector.combineVectors(translationVector, frRotationVector);
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
+    brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
 
     SwerveVector temp = new SwerveVector(2, .1);
 
