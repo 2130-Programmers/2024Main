@@ -9,7 +9,7 @@ public class SwerveVector {
      * @param power - power value
      */
     public SwerveVector(double direction, double power) {
-        this.direction = direction;
+        this.direction = direction % Math.PI*2;
         this.power = power;
     }
 
