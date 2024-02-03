@@ -79,7 +79,7 @@ public class DriveTrain extends SubsystemBase {
 
     //A vector perpendicular to the positionVector of each module, with a strength proportional to how much we want the robot to turn
     //This will be the rotation component of each module's calculation
-    final SwerveVector 
+    final SwerveVector
     frRotationVector = new SwerveVector(frPositionVector.getAngleRadians() + Math.PI/2, r),
     flRotationVector = new SwerveVector(flPositionVector.getAngleRadians() + Math.PI/2, r),
     blRotationVector = new SwerveVector(blPositionVector.getAngleRadians() + Math.PI/2, r),

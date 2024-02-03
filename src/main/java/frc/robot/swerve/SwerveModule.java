@@ -82,8 +82,8 @@ public class SwerveModule {
         // Flip code for rotation ONLY
         // Drivetrain flip handled seperately
 
-        // Decide if this module should flip
-        if (Math.abs(angleError) >= Math.PI / 2) {
+        // Decide if this module should flip, we use > rather than >= since it's slightly faster to turn the module there than reverse direction
+        if (Math.abs(angleError) > Math.PI / 2) {
             shouldFlip = true;
         }else{
             shouldFlip = false;
@@ -135,7 +135,7 @@ public class SwerveModule {
         //If greatest magnitude is greater than one, divide all
         if (highMagnitude > 1) {
             for (int i = 0; i < drivePowers.length; i++) {
-                drivePowers[i] = drivePowers[i] / highMagnitude;
+                drivePowers[i] /= highMagnitude;
             }
         }
 
