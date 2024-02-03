@@ -89,7 +89,7 @@ public class DriveTrain extends SubsystemBase {
     //This is the translational component of our swerve inputs.
     if(x == 0) x = 0.0001;//Don't divide by 0
     SwerveVector translationVector = new SwerveVector(Math.atan2(y, x), Math.sqrt((x * x) + (y * y)));
-
+    
     //Combine the translation and rotation components for each module
     flVector = SwerveVector.combineVectors(translationVector, flRotationVector);
     frVector = SwerveVector.combineVectors(translationVector, frRotationVector);
