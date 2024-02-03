@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.swerve.*;
@@ -42,8 +43,8 @@ public class DriveTrain extends SubsystemBase {
     
     flDriveMotor.setInverted(false);
     frDriveMotor.setInverted(false);
-    blDriveMotor.setInverted(false);
-    brDriveMotor.setInverted(false);
+    blDriveMotor.setInverted(true);
+    brDriveMotor.setInverted(true);
 
     flModule = new SwerveModule(flRotationMotor, flDriveMotor, flEncoder, 0);
     frModule = new SwerveModule(frRotationMotor, frDriveMotor, frEncoder, 1);
@@ -72,10 +73,9 @@ public class DriveTrain extends SubsystemBase {
      * Good resource that covers what is done here: https://dominik.win/blog/programming-swerve-drive/
      */
 
-    x = Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE ? 0 : x;
-    y = Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE ? 0 : y;
-    r = Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE ? 0 : r;
-
+    x = (Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : x;
+    y = (Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : y;
+    r = (Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : r;
 
     //Vectors to pass to the swerve modules every loop
     SwerveVector flVector, frVector, blVector, brVector;
@@ -97,8 +97,8 @@ public class DriveTrain extends SubsystemBase {
 
     //Convert joystick inputs to polar/vector
     //This is the translational component of our swerve inputs.
-    if(x == 0) x = 0.0001;//Don't divide by 0
-    SwerveVector translationVector = new SwerveVector(Math.atan2(y, x), Math.sqrt((x * x) + (y * y)));
+    SmartDashboard.putNumber("safe atan", SwerveVector.safeAtan2(y, x));
+    SwerveVector translationVector = new SwerveVector(SwerveVector.safeAtan2(y, x), Math.sqrt((x * x) + (y * y)));
     
     //Combine the translation and rotation components for each module
     flVector = SwerveVector.combineVectors(translationVector, flRotationVector);
@@ -106,17 +106,17 @@ public class DriveTrain extends SubsystemBase {
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
     brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
 
-    SwerveVector temp = new SwerveVector(Math.PI, .15);
+    // SwerveVector temp = new SwerveVector(0, .15);
 
     flModule.calcDrive(flVector);
     frModule.calcDrive(frVector);
     blModule.calcDrive(blVector);
     brModule.calcDrive(brVector);
 
-    // flModule.calcDrive(temp);
-    // frModule.calcDrive(temp);
-    // blModule.calcDrive(temp);
-    // brModule.calcDrive(temp);
+    // // flModule.calcDrive(temp);
+    // // frModule.calcDrive(temp);
+    // // blModule.calcDrive(temp);
+    // // brModule.calcDrive(temp);
 
     SwerveModule.scaleMagnitudes();
 
@@ -129,5 +129,9 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("fL Encoder", flEncoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("fr Encoder", frEncoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("bl Encoder", blEncoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("br Encoder", brEncoder.getAbsolutePosition().getValueAsDouble());
   }
 }

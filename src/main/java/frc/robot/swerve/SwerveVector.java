@@ -21,6 +21,17 @@ public class SwerveVector {
         power = 0;
     }
 
+    /**
+     * Convert the values from atan(-pi to pi) to a system using 0 to 2pi
+     * @param y - y value
+     * @param x - x value
+     * @return a value from 0 to 2pi
+     */
+    public static double safeAtan2(double y, double x) {
+        double atanValue = Math.atan2(y, x);
+        return atanValue >= 0 ? atanValue : atanValue + Math.PI*2;
+    }
+
 
     /**
      * Find the difference in angles of two vectors
@@ -51,7 +62,7 @@ public class SwerveVector {
         double mX = aX + bX, mY = aY + bY;
 
         //Convert to new vector with direction and magnitude
-        return new SwerveVector(Math.atan2(mY, mX), Math.sqrt((mX * mX) + (mY * mY)));
+        return new SwerveVector(safeAtan2(mY, mX), Math.sqrt((mX * mX) + (mY * mY)));
     }
 
     /**
@@ -107,13 +118,5 @@ public class SwerveVector {
      */
     public double getMagnitude() {
         return power;
-    }
-
-    /**
-     * Sets the power of the vector
-     * @param setPower - power for the vector, must be from 0 to 1
-     */
-    public void setPower(double power) {
-        this.power = power;
     }
 }

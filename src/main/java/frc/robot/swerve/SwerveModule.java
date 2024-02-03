@@ -16,7 +16,7 @@ public class SwerveModule {
     private CANcoder encoder;
     private SwerveVector currentState = new SwerveVector();    
 
-    private boolean shouldFlip = false;
+    private boolean shouldFlip = true;
 
     /**
      * Constructs a new class to represent an arbitrary swerve module, in our case
@@ -36,13 +36,6 @@ public class SwerveModule {
         this.encoder = encoder;
     }
 
-    // /**
-    //  * Enable/disable swerve module
-    //  * @param shouldStop - true if module should stop
-    //  */
-    // public void stopModule(boolean shouldStop) {
-    //     stopModule = shouldStop;
-    // }
 
     /**
      * Move module to target angle and calculate power
@@ -69,8 +62,8 @@ public class SwerveModule {
      * @param targetSteerAngle - target angle for the module based on swerve kinematics
      */
     private void steer(double targetSteerAngle) {
-        int shortestTurnDirection = 0;
-        double steerPower = 0, actualTarget;
+        int shortestTurnDirection;
+        double steerPower, actualTarget;
 
         //Update module state
         currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
@@ -83,22 +76,23 @@ public class SwerveModule {
         // Drivetrain flip handled seperately
 
         // Decide if this module should flip, we use > rather than >= since it's slightly faster to turn the module there than reverse direction
-        if (Math.abs(angleError) > Math.PI / 2) {
-            shouldFlip = true;
-        }else{
-            shouldFlip = false;
-        }
+        // if (Math.abs(angleError) > Math.PI / 2) {
+        //     shouldFlip = true;
+        // }else{
+        //     shouldFlip = false;
+        // }
         
         // Might cause problems when transitioning from a state where it should flip to
         // one where it shouldn't(hopefully not)
-        if (shouldFlip) {
-            // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
-            actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
-            //Reassign error so that it is only the distance to new desired position
-            angleError = actualTarget - currentState.getAngleRadians();
-        } else {
-            actualTarget = targetSteerAngle;
-        }
+        // if (shouldFlip) {
+        //     // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
+        //     actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
+        // } else {
+        //     actualTarget = targetSteerAngle;
+        // }
+
+        // //Reassign error so that it is only the distance to new desired position
+        // angleError = actualTarget - currentState.getAngleRadians();
 
         SmartDashboard.putNumber("Module " + moduleID + " calculated error", angleError);
 
@@ -117,8 +111,9 @@ public class SwerveModule {
 
         //Simple proportional feedback loop based on the difference between the
         //module's actual target and current state
-        steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
-
+        // steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
+        steerPower = angleError * .25;
+        if(angleError >= 1) angleError = .9;
         rotationMotor.set(steerPower);
     }
 
@@ -128,10 +123,7 @@ public class SwerveModule {
 
         //Find greatest magnitude
         for (double currentPower : drivePowers) {
-            if (currentPower > highMagnitude) {
-                highMagnitude = currentPower;
-            }
-
+            if (currentPower > highMagnitude) highMagnitude = currentPower;
         }
 
         //If greatest magnitude is greater than one, divide all
