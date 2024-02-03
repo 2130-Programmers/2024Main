@@ -113,7 +113,7 @@ public class SwerveModule {
         //module's actual target and current state
         // steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
         steerPower = angleError * .25;
-        if(angleError >= 1) angleError = .9;
+        
         rotationMotor.set(steerPower);
     }
 
