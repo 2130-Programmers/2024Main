@@ -9,7 +9,7 @@ public class SwerveVector {
      * @param power - power value
      */
     public SwerveVector(double direction, double power) {
-        this.direction = direction % Math.PI*2;
+        this.direction = direction%(Math.PI*2);
         this.power = power;
     }
 
@@ -60,7 +60,7 @@ public class SwerveVector {
      */
     public void addRadsToAngle(double radsToAdd) {
         direction += radsToAdd;
-        direction = direction % (Math.PI/2);
+        direction = direction % (Math.PI*2);
     }
 
     /**
@@ -91,14 +91,14 @@ public class SwerveVector {
      * Sets the vector angle in degrees
      */
     public void setAngleDegrees(double angle){
-        direction = (angle / 57.29578) % (Math.PI/2);
+        direction = (angle / 57.29578) % (Math.PI*2);
     }
 
     /**
      * Sets the vector angle in degrees
      */
     public void setAngleRadians(double angle){
-        direction = angle % (Math.PI/2);
+        direction = angle % (Math.PI*2);
     }
 
     /**

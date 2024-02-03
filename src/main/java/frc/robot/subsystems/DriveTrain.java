@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -13,7 +14,17 @@ import frc.robot.Constants;
 import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
-  private static CANcoder
+  private static final CANSparkMax
+  flRotationMotor = new CANSparkMax(10, MotorType.kBrushless),
+  frRotationMotor = new CANSparkMax(12, MotorType.kBrushless),
+  blRotationMotor = new CANSparkMax(14, MotorType.kBrushless),
+  brRotationMotor = new CANSparkMax(16, MotorType.kBrushless),
+  flDriveMotor = new CANSparkMax(11, MotorType.kBrushless),
+  frDriveMotor = new CANSparkMax(13, MotorType.kBrushless),
+  blDriveMotor = new CANSparkMax(15, MotorType.kBrushless),
+  brDriveMotor = new CANSparkMax(17, MotorType.kBrushless);
+
+  private static final CANcoder
   flEncoder = new CANcoder(20),
   frEncoder = new CANcoder(21),
   blEncoder = new CANcoder(22),
@@ -24,27 +35,26 @@ public class DriveTrain extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    flModule = new SwerveModule(new CANSparkMax(10, MotorType.kBrushless), new CANSparkMax(11, MotorType.kBrushless), flEncoder, 0);
-    frModule = new SwerveModule(new CANSparkMax(12, MotorType.kBrushless), new CANSparkMax(13, MotorType.kBrushless), frEncoder, 1);
-    blModule = new SwerveModule(new CANSparkMax(14, MotorType.kBrushless), new CANSparkMax(15, MotorType.kBrushless), blEncoder, 2);
-    brModule = new SwerveModule(new CANSparkMax(16, MotorType.kBrushless), new CANSparkMax(17, MotorType.kBrushless), brEncoder, 3);
+    flRotationMotor.setInverted(true);
+    frRotationMotor.setInverted(true);
+    blRotationMotor.setInverted(true);
+    brRotationMotor.setInverted(true);
+    
+    flDriveMotor.setInverted(false);
+    frDriveMotor.setInverted(false);
+    blDriveMotor.setInverted(false);
+    brDriveMotor.setInverted(false);
+
+    flModule = new SwerveModule(flRotationMotor, flDriveMotor, flEncoder, 0);
+    frModule = new SwerveModule(frRotationMotor, frDriveMotor, frEncoder, 1);
+    blModule = new SwerveModule(blRotationMotor, blDriveMotor, blEncoder, 2);
+    brModule = new SwerveModule(brRotationMotor, brDriveMotor, brEncoder, 3);
   }
 
   //Assuming robot is square
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 
   public void calculateKinematics(double x, double y, double r) {
-
-    // if(Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE && Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE && Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) {
-    //   for(SwerveModule module : moduleArray) {
-    //     module.stopModule(true);
-    //   }
-    // }else{
-    //   for(SwerveModule module : moduleArray) {
-    //     module.stopModule(false);
-    //   }
-    // }
-
     /*
      * Simply put, swerve takes a vector for velocity and an angular rotation component as inputs.
      * This function simply handles passing target values to each module(solving kinematics but not coordinating fip/rotations)
@@ -62,9 +72,9 @@ public class DriveTrain extends SubsystemBase {
      * Good resource that covers what is done here: https://dominik.win/blog/programming-swerve-drive/
      */
 
-     if (Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) x = 0;
-     if (Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) y = 0;
-     if (Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) r = 0;
+    x = Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE ? 0 : x;
+    y = Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE ? 0 : y;
+    r = Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE ? 0 : r;
 
 
     //Vectors to pass to the swerve modules every loop
@@ -96,12 +106,17 @@ public class DriveTrain extends SubsystemBase {
     blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
     brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
 
-    SwerveVector temp = new SwerveVector(2, .1);
+    SwerveVector temp = new SwerveVector(Math.PI, .15);
 
     flModule.calcDrive(flVector);
     frModule.calcDrive(frVector);
     blModule.calcDrive(blVector);
     brModule.calcDrive(brVector);
+
+    // flModule.calcDrive(temp);
+    // frModule.calcDrive(temp);
+    // blModule.calcDrive(temp);
+    // brModule.calcDrive(temp);
 
     SwerveModule.scaleMagnitudes();
 

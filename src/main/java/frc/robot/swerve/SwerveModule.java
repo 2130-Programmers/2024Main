@@ -1,5 +1,6 @@
 package frc.robot.swerve;
 
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
@@ -53,7 +54,6 @@ public class SwerveModule {
         drivePowers[moduleID] = moduleVector.getMagnitude();
 
         SmartDashboard.putNumber("Module " + moduleID + " encoder raw", encoder.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("Module " + moduleID + " encoder position", encoder.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Module " + moduleID + " target angle", moduleVector.getAngleDegrees());
     }
 
@@ -77,7 +77,7 @@ public class SwerveModule {
 
         // Calculate error for steer motor - error is positive if the module should move ccw
         double angleError = targetSteerAngle - currentState.getAngleRadians();
-        SmartDashboard.putNumber("Module " + moduleID + " error", angleError);
+        SmartDashboard.putNumber("Module " + moduleID + "measured error", angleError);
 
         // Flip code for rotation ONLY
         // Drivetrain flip handled seperately
@@ -100,6 +100,8 @@ public class SwerveModule {
             actualTarget = targetSteerAngle;
         }
 
+        SmartDashboard.putNumber("Module " + moduleID + " calculated error", angleError);
+
         //Find shortest move direction
         if (angleError > Constants.DriveTrainConstants.SWERVE_DEADZONE) {// Needs to move cw
             shortestTurnDirection = 1;
@@ -115,7 +117,7 @@ public class SwerveModule {
 
         //Simple proportional feedback loop based on the difference between the
         //module's actual target and current state
-        steerPower = Math.abs(angleError) * shortestTurnDirection * 0.05;
+        steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
 
         rotationMotor.set(steerPower);
     }
