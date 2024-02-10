@@ -112,7 +112,7 @@ public class SwerveModule {
         //Simple proportional feedback loop based on the difference between the
         //module's actual target and current state
         // steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
-        steerPower = angleError * .25;
+        steerPower = angleError * .20;
         
         rotationMotor.set(steerPower);
     }
