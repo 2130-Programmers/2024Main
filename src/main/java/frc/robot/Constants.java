@@ -24,5 +24,15 @@ public final class Constants {
     PI2 = Math.PI * 2,
     SWERVE_DEADZONE = Math.PI/12,
     JOYSTICK_DEADZONE = .05;
+
+    // -----------------------------------------------------------------------------\\
+    //                                                                              \\
+    //                           SWERVE CONSTANTS                                   \\
+    //                                                                              \\
+    // -----------------------------------------------------------------------------\\
+    /**RotationSpeedCap limits the rotation speed of the swerve wheels to about 30% of total possible output. */
+    public static double RotationSpeedCap = .3;
+    /** SwerveDriveSpeed is the scalar for total motor power output of actual wheel to move forward. */
+    public static double SwerveDriveSpeed = .4;
   }
 }

@@ -41,8 +41,8 @@ public class DriveTrain extends SubsystemBase {
     blRotationMotor.setInverted(true);
     brRotationMotor.setInverted(true);
     
-    flDriveMotor.setInverted(false);
-    frDriveMotor.setInverted(false);
+    flDriveMotor.setInverted(true);
+    frDriveMotor.setInverted(true);
     blDriveMotor.setInverted(true);
     brDriveMotor.setInverted(true);
 
