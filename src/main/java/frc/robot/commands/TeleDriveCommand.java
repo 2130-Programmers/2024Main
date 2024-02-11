@@ -25,7 +25,7 @@ public class TeleDriveCommand extends Command {
   @Override
   public void execute() {
     driveTrain.calculateKinematics(
-                                    RobotContainer.driverGamepad.getLeftX(),
+                                    RobotContainer.driverGamepad.getLeftX() * -1,
                                     RobotContainer.driverGamepad.getLeftY(),
                                     RobotContainer.driverGamepad.getRightX()
                                   );

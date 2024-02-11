@@ -56,6 +56,9 @@ public class DriveTrain extends SubsystemBase {
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 
   public void calculateKinematics(double x, double y, double r) {
+
+    System.out.println("LeftX: " + x + " LeftY: " + y + " RightX: " + r);
+
       /*
       * Simply put, swerve takes a vector for velocity and an angular rotation component as inputs.
       * This function simply handles passing target values to each module(solving kinematics but not coordinating fip/rotations)
@@ -73,9 +76,9 @@ public class DriveTrain extends SubsystemBase {
       * Good resource that covers what is done here: https://dominik.win/blog/programming-swerve-drive/
       */
 
-      x = (Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : x;
-      y = (Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : y;
-      r = (Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : r;
+      // x = (Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : x;
+      // y = (Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : y;
+      // r = (Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : r;
 
       //Vectors to pass to the swerve modules every loop
       SwerveVector flVector, frVector, blVector, brVector;
@@ -106,17 +109,10 @@ public class DriveTrain extends SubsystemBase {
       blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
       brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
 
-      // SwerveVector temp = new SwerveVector(0, .15);
-
       flModule.calcDrive(flVector);
       frModule.calcDrive(frVector);
       blModule.calcDrive(blVector);
       brModule.calcDrive(brVector);
-
-      // // flModule.calcDrive(temp);
-      // // frModule.calcDrive(temp);
-      // // blModule.calcDrive(temp);
-      // // brModule.calcDrive(temp);
 
       SwerveModule.scaleMagnitudes();
 
