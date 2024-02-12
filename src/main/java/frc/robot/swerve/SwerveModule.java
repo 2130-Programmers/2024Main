@@ -115,26 +115,13 @@ public class SwerveModule {
     }
 
     /**
-     * If one or more modules have a steer power greater than the limit, scalle all values so they stay at or below the limit
+     * Check if each power value is above the limit, and if so set it equal to the limit.
      */
     public static void scaleSteerPowers() {
-        double highSteer = 0;
-
         //Find greatest magnitude
-        for (double currentPower : steerPowers) {
-            if (currentPower > highSteer) highSteer = currentPower;
+        for (int i = 0; i < steerPowers.length; i++)) {
+            if (steerPowers[i] > Constants.DriveTrainConstants.PEAK_TURN_POWER) steerPowers[i] = Constants.DriveTrainConstants.PEAK_TURN_POWER;
         }
-        
-        //Calculate a scalar that will make the greatest value equal to the limit
-        double scaleMultiplier = Constants.DriveTrainConstants.PEAK_TURN_POWER/highSteer;
-
-        //If greatest magnitude is greater than the limit, scale all values
-        if (highSteer > Constants.DriveTrainConstants.PEAK_DRIVE_POWER) {
-            for (int i = 0; i < drivePowers.length; i++) {
-                steerPowers[i] *= scaleMultiplier;
-            }
-        }
-
     }
 
 
