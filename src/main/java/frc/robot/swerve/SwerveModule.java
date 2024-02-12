@@ -119,7 +119,7 @@ public class SwerveModule {
      */
     public static void scaleSteerPowers() {
         //Find greatest magnitude
-        for (int i = 0; i < steerPowers.length; i++)) {
+        for (int i = 0; i < steerPowers.length; i++) {
             if (steerPowers[i] > Constants.DriveTrainConstants.PEAK_TURN_POWER) steerPowers[i] = Constants.DriveTrainConstants.PEAK_TURN_POWER;
         }
     }
