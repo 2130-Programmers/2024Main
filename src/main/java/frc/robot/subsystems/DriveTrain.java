@@ -115,6 +115,7 @@ public class DriveTrain extends SubsystemBase {
       brModule.calcDrive(brVector);
 
       SwerveModule.scaleMagnitudes();
+      SwerveModule.scaleSteerPowers();
 
       flModule.applyDrive();
       frModule.applyDrive();

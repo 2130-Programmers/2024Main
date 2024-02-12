@@ -23,6 +23,8 @@ public final class Constants {
     BOT_WIDTH = 80,
     PI2 = Math.PI * 2,
     SWERVE_DEADZONE = Math.PI/12,
-    JOYSTICK_DEADZONE = .10;
+    JOYSTICK_DEADZONE = .10,
+    PEAK_DRIVE_POWER = .6,
+    PEAK_TURN_POWER = .75;
   }
 }

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
-    static double[] drivePowers = new double[4], steerErrors = new double[4];
+    static double[] drivePowers = new double[4], steerPowers = new double[4], steerErrors = new double[4];
     static int bestTurnDirAllModules = 0;
 
     private final int moduleID;
@@ -36,6 +36,13 @@ public class SwerveModule {
         this.encoder = encoder;
     }
 
+    /**
+     * Apply calculated power to drive and rotation motors
+     */
+    public void applyDrive() {
+        driveMotor.set(drivePowers[moduleID]);
+        rotationMotor.set(steerPowers[moduleID]);
+    }
 
     /**
      * Move module to target angle and calculate power
@@ -43,25 +50,15 @@ public class SwerveModule {
      * @param moduleVector
      */
     public void calcDrive(SwerveVector moduleVector) {
-        steer(moduleVector.getAngleRadians());
+        calcSteer(moduleVector.getAngleRadians());
         drivePowers[moduleID] = moduleVector.getMagnitude();
-
-        SmartDashboard.putNumber("Module " + moduleID + " encoder raw", encoder.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("Module " + moduleID + " target angle", moduleVector.getAngleDegrees());
     }
 
     /**
-     * Apply calculated power to drive motor
-     */
-    public void applyDrive() {
-        driveMotor.set(drivePowers[moduleID]);
-    }
-
-    /**
-     * Calculate and apply steering motor power
+     * Calculate steering motor power
      * @param targetSteerAngle - target angle for the module based on swerve kinematics
      */
-    private void steer(double targetSteerAngle) {
+    private void calcSteer(double targetSteerAngle) {
         int shortestTurnDirection;
         double steerPower, actualTarget;
 
@@ -113,11 +110,37 @@ public class SwerveModule {
         //module's actual target and current state
         // steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
         steerPower = angleError * .20;
-        
-        rotationMotor.set(steerPower);
+
+        steerPowers[moduleID] = steerPower;
     }
 
-    //If one module power is greater than 1, divide all modules by the greatest magnitude to scale
+    /**
+     * If one or more modules have a steer power greater than the limit, scalle all values so they stay at or below the limit
+     */
+    public static void scaleSteerPowers() {
+        double highSteer = 0;
+
+        //Find greatest magnitude
+        for (double currentPower : steerPowers) {
+            if (currentPower > highSteer) highSteer = currentPower;
+        }
+        
+        //Calculate a scalar that will make the greatest value equal to the limit
+        double scaleMultiplier = Constants.DriveTrainConstants.PEAK_TURN_POWER/highSteer;
+
+        //If greatest magnitude is greater than the limit, scale all values
+        if (highSteer > Constants.DriveTrainConstants.PEAK_DRIVE_POWER) {
+            for (int i = 0; i < drivePowers.length; i++) {
+                steerPowers[i] *= scaleMultiplier;
+            }
+        }
+
+    }
+
+
+    /**
+     * If one or more modules have a drive power greater than the limit, scalle all values so they stay at or below the limit
+     */
     public static void scaleMagnitudes() {
         double highMagnitude = 0;
 
@@ -125,11 +148,14 @@ public class SwerveModule {
         for (double currentPower : drivePowers) {
             if (currentPower > highMagnitude) highMagnitude = currentPower;
         }
+        
+        //Calculate a scalar that will make the greatest value equal to the limit
+        double scaleMultiplier = Constants.DriveTrainConstants.PEAK_DRIVE_POWER/highMagnitude;
 
-        //If greatest magnitude is greater than one, divide all
-        if (highMagnitude > 1) {
+        //If greatest magnitude is greater than the limit, scale all values
+        if (highMagnitude > Constants.DriveTrainConstants.PEAK_DRIVE_POWER) {
             for (int i = 0; i < drivePowers.length; i++) {
-                drivePowers[i] /= highMagnitude;
+                drivePowers[i] *= scaleMultiplier;
             }
         }
 
