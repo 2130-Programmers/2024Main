@@ -73,23 +73,23 @@ public class SwerveModule {
         // Drivetrain flip handled seperately
 
         // Decide if this module should flip, we use > rather than >= since it's slightly faster to turn the module there than reverse direction
-        // if (Math.abs(angleError) > Math.PI / 2) {
-        //     shouldFlip = true;
-        // }else{
-        //     shouldFlip = false;
-        // }
+        if (Math.abs(angleError) > Math.PI / 2) {
+            shouldFlip = true;
+        }else{
+            shouldFlip = false;
+        }
         
         // Might cause problems when transitioning from a state where it should flip to
         // one where it shouldn't(hopefully not)
-        // if (shouldFlip) {
-        //     // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
-        //     actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
-        // } else {
-        //     actualTarget = targetSteerAngle;
-        // }
+        if (shouldFlip) {
+            // Flip the target 180 degrees and move it back to within 2pi if it falls outside of that
+            actualTarget = (targetSteerAngle + Math.PI) % (Math.PI * 2);
+        } else {
+            actualTarget = targetSteerAngle;
+        }
 
-        // //Reassign error so that it is only the distance to new desired position
-        // angleError = actualTarget - currentState.getAngleRadians();
+        //Reassign error so that it is only the distance to new desired position
+        angleError = actualTarget - currentState.getAngleRadians();
 
         SmartDashboard.putNumber("Module " + moduleID + " calculated error", angleError);
 
