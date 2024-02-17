@@ -113,8 +113,8 @@ public class SwerveVector {
     }
 
     /**
-     * Returns the power of the vector
-     * @return vector power, from 0 to 1
+     * Returns the magnitude of the vector
+     * @return vector magnitude
      */
     public double getMagnitude() {
         return power;
