@@ -21,8 +21,8 @@ public final class Constants {
     public static final double
     BOT_LENGTH = 80,
     BOT_WIDTH = 80,
-    SWERVE_STEER_DEADZONE = Math.PI/12,
-    SWERVE_DRIVE_DEADZONE = .10,
+    SWERVE_DEADZONE = Math.PI/12,
+    JOYSTICK_DEADZONE = .10,
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1;
   }
