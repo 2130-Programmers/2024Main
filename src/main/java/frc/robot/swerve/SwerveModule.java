@@ -40,7 +40,7 @@ public class SwerveModule {
      * Apply calculated power to drive and rotation motors
      */
     public void applyMotorPowers() {
-        driveMotor.set(drivePowers[moduleID]);
+        // driveMotor.set(drivePowers[moduleID]);
         rotationMotor.set(steerPowers[moduleID]);
     }
 
@@ -49,8 +49,6 @@ public class SwerveModule {
      * @param moduleVector - vector with target magnitude and angle for swerve module
      */
     public void calcDrive(SwerveVector moduleVector) {
-        double steerPower, actualTarget;
-
         //Update module state
         currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
 
@@ -58,8 +56,11 @@ public class SwerveModule {
         double angleError = SwerveVector.subVectorAngles(moduleVector, currentState);
         SmartDashboard.putNumber("Module " + moduleID + " measured error", angleError);
 
+        // Multiply the power by cos of the angle error to allow for both flip code and slowing down wheels that are pointing off target
         drivePowers[moduleID] = Math.cos(angleError) * moduleVector.getMagnitude();
 
+        //If drivePower is negative(motor reversed) then flip the actual target as well
+        double actualTarget;
         if(drivePowers[moduleID] < 0) {
             actualTarget = (moduleVector.getAngleRadians() + Math.PI) % (Math.PI * 2);
         } else {
@@ -71,15 +72,14 @@ public class SwerveModule {
 
         SmartDashboard.putNumber("Module " + moduleID + " calculated error", angleError);
  
-        //Find shortest move direction
+        //If wheel is within deadzone, set power to 0
         int shouldTurn = (Math.abs(angleError) < Constants.DriveTrainConstants.SWERVE_DEADZONE) ? 0 : 1;
 
         //Only remaining thing is to synchronise module turn direction!!!
 
         //Simple proportional feedback loop based on the difference between the
         //module's actual target and current state
-        //steerPower = Math.abs(angleError) * shortestTurnDirection * 0.25;
-        steerPower = angleError * .20 * shouldTurn;
+        double steerPower = angleError * .3 * shouldTurn;
 
         steerPowers[moduleID] = steerPower;
     }
@@ -90,7 +90,7 @@ public class SwerveModule {
     public static void scaleSteerPowers() {
         //Find greatest magnitude
         for (int i = 0; i < steerPowers.length; i++) {
-            if (steerPowers[i] > Constants.DriveTrainConstants.PEAK_TURN_POWER) steerPowers[i] = Constants.DriveTrainConstants.PEAK_TURN_POWER;
+            if (Math.abs(steerPowers[i]) > Constants.DriveTrainConstants.PEAK_TURN_POWER) steerPowers[i] = (Constants.DriveTrainConstants.PEAK_TURN_POWER) * (Math.abs(steerPowers[i])/steerPowers[i]);
         }
     }
 
