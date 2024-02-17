@@ -55,70 +55,71 @@ public class DriveTrain extends SubsystemBase {
   //Assuming robot is square
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 
+  //Vectors or lines from the origin to each swerve module. We can later change the origin to allow rotation around points other than the center of the robot
+  final SwerveVector
+  frPositionVector = new SwerveVector(Math.PI/4, moduleDistFromCenter),
+  flPositionVector = new SwerveVector(Math.PI*3/4, moduleDistFromCenter),
+  blPositionVector = new SwerveVector(Math.PI*5/4, moduleDistFromCenter),
+  brPositionVector = new SwerveVector(Math.PI*7/4, moduleDistFromCenter);
+
   public void calculateKinematics(double x, double y, double r) {
 
-      /*
-      * Simply put, swerve takes a vector for velocity and an angular rotation component as inputs.
-      * This function simply handles passing target values to each module(solving kinematics but not coordinating fip/rotations)
-      * 
-      * The origin(0, 0) on our 2d coordinate plane is found at the center of the robot frame
-      * By shifting the origin or the positions of the modules relative to the origin we can change the point about which the robot rotates
-      * This coordinate plane uses inches as units(currently)
-      * 
-      * Module locations are expressed as coordinates on that plane
-      * Our implementation is designed expecting four modules, but could be scaled down to three or up to solve for more than four modules
-      * 
-      * Fundamentally, each module needs to probel itself(and the attatched robot) along a vector which can be described rather simply.
-      * We do this by adding together the translation and rotational components of our inputs and multiplying that sum by a vector perpendicular to the line from origin to module n.
-      * 
-      * Good resource that covers what is done here: https://dominik.win/blog/programming-swerve-drive/
-      */
+    /*
+    * Simply put, swerve takes a vector for velocity and an angular rotation component as inputs.
+    * This function simply handles passing target values to each module(solving kinematics but not coordinating fip/rotations)
+    * 
+    * The origin(0, 0) on our 2d coordinate plane is found at the center of the robot frame
+    * By shifting the origin or the positions of the modules relative to the origin we can change the point about which the robot rotates
+    * This coordinate plane uses inches as units(currently)
+    * 
+    * Module locations are expressed as coordinates on that plane
+    * Our implementation is designed expecting four modules, but could be scaled down to three or up to solve for more than four modules
+    * 
+    * Fundamentally, each module needs to probel itself(and the attatched robot) along a vector which can be described rather simply.
+    * We do this by adding together the translation and rotational components of our inputs and multiplying that sum by a vector perpendicular to the line from origin to module n.
+    * 
+    * Good resource that covers what is done here: https://dominik.win/blog/programming-swerve-drive/
+    */
 
-      x = (Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : x;
-      y = (Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : y;
-      r = (Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : r;
+    //A vector perpendicular to the positionVector of each module, with a strength proportional to how much we want the robot to turn
+    //This will be the rotation component of each module's calculation
+    final SwerveVector
+    frRotationVector = new SwerveVector(frPositionVector.getAngleRadians() + Math.PI/2, r),
+    flRotationVector = new SwerveVector(flPositionVector.getAngleRadians() + Math.PI/2, r),
+    blRotationVector = new SwerveVector(blPositionVector.getAngleRadians() + Math.PI/2, r),
+    brRotationVector = new SwerveVector(brPositionVector.getAngleRadians() + Math.PI/2, r);
 
-      //Vectors to pass to the swerve modules every loop
-      SwerveVector flVector, frVector, blVector, brVector;
+    //Convert joystick inputs to polar/vector
+    //This is the translational component of our swerve inputs.
+    SmartDashboard.putNumber("safe atan", SwerveVector.safeAtan2(y, x));
+    SwerveVector translationVector = new SwerveVector(SwerveVector.safeAtan2(y, x), Math.sqrt((x * x) + (y * y)));
+    
+    //Combine the translation and rotation components for each module
+    SwerveVector
+    flVector = SwerveVector.combineVectors(translationVector, flRotationVector),
+    frVector = SwerveVector.combineVectors(translationVector, frRotationVector),
+    blVector = SwerveVector.combineVectors(translationVector, blRotationVector),
+    brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
 
-      //Vectors or lines from the origin to each swerve module. We can later change the origin to allow rotation around points other than the center of the robot
-      final SwerveVector
-      frPositionVector = new SwerveVector(Math.PI/4, moduleDistFromCenter),
-      flPositionVector = new SwerveVector(Math.PI*3/4, moduleDistFromCenter),
-      blPositionVector = new SwerveVector(Math.PI*5/4, moduleDistFromCenter),
-      brPositionVector = new SwerveVector(Math.PI*7/4, moduleDistFromCenter);
+    if(flVector.getMagnitude() < Constants.DriveTrainConstants.SWERVE_DRIVE_DEADZONE && frVector.getMagnitude() < Constants.DriveTrainConstants.SWERVE_DRIVE_DEADZONE && blVector.getMagnitude() < Constants.DriveTrainConstants.SWERVE_DRIVE_DEADZONE && brVector.getMagnitude() < Constants.DriveTrainConstants.SWERVE_DRIVE_DEADZONE) {
+      flVector.setMagnitude(0);
+      frVector.setMagnitude(0);
+      blVector.setMagnitude(0);
+      brVector.setMagnitude(0);
+    }
 
-      //A vector perpendicular to the positionVector of each module, with a strength proportional to how much we want the robot to turn
-      //This will be the rotation component of each module's calculation
-      final SwerveVector
-      frRotationVector = new SwerveVector(frPositionVector.getAngleRadians() + Math.PI/2, r),
-      flRotationVector = new SwerveVector(flPositionVector.getAngleRadians() + Math.PI/2, r),
-      blRotationVector = new SwerveVector(blPositionVector.getAngleRadians() + Math.PI/2, r),
-      brRotationVector = new SwerveVector(brPositionVector.getAngleRadians() + Math.PI/2, r);
+    flModule.calcDrive(flVector);
+    frModule.calcDrive(frVector);
+    blModule.calcDrive(blVector);
+    brModule.calcDrive(brVector);
 
-      //Convert joystick inputs to polar/vector
-      //This is the translational component of our swerve inputs.
-      SmartDashboard.putNumber("safe atan", SwerveVector.safeAtan2(y, x));
-      SwerveVector translationVector = new SwerveVector(SwerveVector.safeAtan2(y, x), Math.sqrt((x * x) + (y * y)));
-      
-      //Combine the translation and rotation components for each module
-      flVector = SwerveVector.combineVectors(translationVector, flRotationVector);
-      frVector = SwerveVector.combineVectors(translationVector, frRotationVector);
-      blVector = SwerveVector.combineVectors(translationVector, blRotationVector);
-      brVector = SwerveVector.combineVectors(translationVector, brRotationVector);
+    SwerveModule.scaleMagnitudes();
+    SwerveModule.scaleSteerPowers();
 
-      flModule.calcDrive(flVector);
-      frModule.calcDrive(frVector);
-      blModule.calcDrive(blVector);
-      brModule.calcDrive(brVector);
-
-      SwerveModule.scaleMagnitudes();
-      SwerveModule.scaleSteerPowers();
-
-      flModule.applyMotorPowers();
-      frModule.applyMotorPowers();
-      blModule.applyMotorPowers();
-      brModule.applyMotorPowers();
+    flModule.applyMotorPowers();
+    frModule.applyMotorPowers();
+    blModule.applyMotorPowers();
+    brModule.applyMotorPowers();
   }
 
   @Override

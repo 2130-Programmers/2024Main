@@ -75,14 +75,6 @@ public class SwerveVector {
     }
 
     /**
-     * Multiply the vector by value
-     * @param multBy - the value to multiply the vector by
-     */
-    public void multiplyVector(double multBy) {
-        power *= multBy;
-    }
-
-    /**
      * Gets the vector angle in degrees
      * @return angle in degrees from 0 to 360
      */
@@ -118,5 +110,13 @@ public class SwerveVector {
      */
     public double getMagnitude() {
         return power;
+    }
+
+    /**
+     * Set vector magnitude
+     * @param power - the magnitude to apply to the vector
+     */
+    public void setMagnitude(double power) {
+        this.power = power;
     }
 }

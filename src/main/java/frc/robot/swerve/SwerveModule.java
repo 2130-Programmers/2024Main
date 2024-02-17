@@ -72,7 +72,7 @@ public class SwerveModule {
         SmartDashboard.putNumber("Module " + moduleID + " calculated error", angleError);
  
         //Find shortest move direction
-        int shouldTurn = (Math.abs(angleError) < Constants.DriveTrainConstants.SWERVE_DEADZONE) ? 0 : 1;
+        int shouldTurn = (Math.abs(angleError) < Constants.DriveTrainConstants.SWERVE_STEER_DEADZONE) ? 0 : 1;
 
         //Only remaining thing is to synchronise module turn direction!!!
 
