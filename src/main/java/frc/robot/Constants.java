@@ -23,4 +23,13 @@ public final class Constants {
     BOT_WIDTH = 80,
     PI2 = Math.PI * 2;
   }
+
+  public static class LauncherConstants {
+    public static final double
+    LAUNCH_POWER = 1,
+    ANGLE_POWER = 1,
+    ANGLE_DEADZONE = 50,
+    INTAKE_POWER = 1,
+    LAUNCHER_MAX_ANGLE = 1000;
+  }
 }
