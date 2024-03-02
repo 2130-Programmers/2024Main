@@ -100,9 +100,10 @@ public class NoteHandler extends SubsystemBase {
 
     /**
    * Set the power of rotation motors - positive moves the intake side up, and thus the launcher points lower.
+   * Change to private ASAP
    * @param power - double, from -1 to 1
    */
-  private void setRotatePower(double power) {
+  public void setRotatePower(double power) {
     rotateLeft.set(power);
     rotateRight.set(power);
   }
