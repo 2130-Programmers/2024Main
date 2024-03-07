@@ -133,15 +133,20 @@ public class DriveTrain extends SubsystemBase {
    */
   public void altDrive(double x, double y, double twist) {
     y*=-1;
-    double gyroWrapped = Math.toRadians(RobotContainer.gyro.gyroYaw() % 360),
-           targetAngle = Math.atan2(y, x);
+    
+    //Wrap gyro value to 0-360
+    double gyroWrapped = Math.toRadians(RobotContainer.gyro.gyroYaw() % 360);
+    //Convert cartesian coords to an angle in radians
+    double targetAngle = Math.atan2(y, x);
+    //Find error in angle
+    double angleDif = targetAngle - gyroWrapped;
+    //Find nthe radius, aka drive power
+    double radius = Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
 
-    double angleDif = targetAngle - gyroWrapped,
-      radius = Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
-
-      calculateKinematics(Math.cos(angleDif)*radius*-1,
-                          Math.sin(angleDif)*radius,
-                          twist);
+    //Pass calculated values to the drivetrain
+    calculateKinematics(Math.cos(angleDif)*radius*-1,
+                        Math.sin(angleDif)*radius,
+                        twist);
   }
 
   @Override

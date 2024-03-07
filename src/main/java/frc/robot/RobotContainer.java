@@ -32,7 +32,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
+    //Configure the trigger bindings
     configureBindings();
 
     //Set default command so that it runs periodically
@@ -49,6 +49,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    //Bind alt drive to right bumper
     driverGamepad.rightBumper().whileTrue(altDriveCom);
   }
 
