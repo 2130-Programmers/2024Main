@@ -44,16 +44,16 @@ public class Gyro extends SubsystemBase {
 
   /**Average drift from last 8 seconds and apply as drift offset
    */
-  public static void recalibrateGyro(){
+  public void recalibrateGyro(){
    gyroSensor.calibrate();
   }
   /**Reset gyro reading to 0*/
-  public static void zeroGyro() {
+  public void zeroGyro() {
     gyroSensor.reset();
   }
 
   /**Returns current angle reading from set axis*/
-  public static double gyroYaw() {
+  public double gyroYaw() {
     return gyroSensor.getAngle();
   }
 

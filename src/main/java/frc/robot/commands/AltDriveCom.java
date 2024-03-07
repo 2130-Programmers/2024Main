@@ -7,9 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Gyro;
@@ -19,11 +17,12 @@ public class AltDriveCom extends Command {
   private Gyro gyro;
 
   /** Creates a new AltDriveCom. */
-  public AltDriveCom(DriveTrain tempdrive, Gyro tempgyro) {
+  public AltDriveCom(DriveTrain tempDrive, Gyro tempGyro) {
     // Use addRequirements() here to declare subsystem dependencies.
-    driveTrain = tempdrive;
-    gyro = tempgyro;
-    this.addRequirements(tempdrive);
+    driveTrain = tempDrive;
+    gyro = tempGyro;
+    addRequirements(tempDrive);
+    addRequirements(tempGyro);
   }
 
   // Called when the command is initially scheduled.
@@ -35,10 +34,9 @@ public class AltDriveCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.driveTrain.moveSwerveAxisAlt(RobotContainer.driverJoy.getRawAxis(Constants.LeftAxisX),
-                                                RobotContainer.driverJoy.getRawAxis(Constants.LeftAxisY),
-                                                RobotContainer.driverJoy.getRawAxis(Constants.RightAxisX) * .5,
-                                                .5);
+    driveTrain.altDrive(RobotContainer.driverGamepad.getLeftX(),
+                        RobotContainer.driverGamepad.getLeftY(),
+                        RobotContainer.driverGamepad.getRightX() * .5);
   }
 
   // Called once the command ends or is interrupted.
@@ -48,6 +46,6 @@ public class AltDriveCom extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.driverJoy.getRightBumperPressed();
+    return false;
   }
 }

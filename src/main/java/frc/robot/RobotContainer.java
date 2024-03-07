@@ -4,9 +4,9 @@
 //GITHUB Push Test - Caiden Sutherland - 1/18/24
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // -- SUBSYSTEMS -- \\
   public static final DriveTrain driveTrain = new DriveTrain();
+  public static final Gyro gyro = new Gyro();
 
   // -- COMMANDS  -- \\
   public static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
+  public static final AltDriveCom altDriveCom = new AltDriveCom(driveTrain, gyro);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final CommandXboxController driverGamepad =
@@ -47,6 +49,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    driverGamepad.rightBumper().whileTrue(altDriveCom);
   }
 
   /**
