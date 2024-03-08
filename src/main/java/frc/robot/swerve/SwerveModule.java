@@ -40,23 +40,32 @@ public class SwerveModule {
      * Apply calculated power to drive and rotation motors
      */
     public void applyMotorPowers() {
-        // driveMotor.set(drivePowers[moduleID]);
+        driveMotor.set(drivePowers[moduleID]);
         rotationMotor.set(steerPowers[moduleID]);
     }
 
+
+    boolean isFlipped;
     /**
      * Calculate steering motor power
      * @param moduleVector - vector with target magnitude and angle for swerve module
      */
-    double rawAngleError, adjustedAngleError;
-    boolean isFlipped;
     public void calcDrive(SwerveVector moduleVector) {
         //Update module state
         currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
 
-        // Calculate error for steer motor - error is positive if the module should move ccw
-        rawAngleError = SwerveVector.subVectorAngles(moduleVector, currentState);
+        // Calculate error for steer motor - error is positive if the module should move ccw.
+        // These methods automatically correct for the inneffeciency that arises to avoid turning 270 one way instead of 90 the other
+        double rawAngleError = SwerveVector.getClosestAngle(moduleVector, currentState);
+        double alternateAngleError = SwerveVector.getAlternateAngle(moduleVector, currentState);
 
+        if(Math.abs(rawAngleError) < Math.abs(alternateAngleError)) {
+            steerPowers[moduleID] = rawAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
+            drivePowers[moduleID] *= Math.abs(Math.cos(rawAngleError));
+        } else {
+            steerPowers[moduleID] = alternateAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
+            drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
+        }
     }
 
 

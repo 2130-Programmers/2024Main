@@ -34,13 +34,25 @@ public class SwerveVector {
 
 
     /**
-     * Find the difference in angles of two vectors
+     * Find the error between target and current location
      * @param minuend - the angle to be subtracted from
      * @param subtrahend - the angle we subtract
      * @return the difference between the two angles
      */
-    public static double subVectorAngles(SwerveVector minuend, SwerveVector subtrahend) {
-        return minuend.getAngleRadians() - subtrahend.getAngleRadians();
+    public static double getClosestAngle(SwerveVector minuend, SwerveVector subtrahend) {
+        //Find the error from -pi to pi and scale to proper domain
+        return convertToAltDomain(minuend.getAngleRadians() - subtrahend.getAngleRadians());
+    }
+
+    /**
+     * Find the difference between target and current, but try an alternate location that is offset 180 degrees
+     * @param minuend - the angle to be subtracted from
+     * @param subtrahend - the angle we subtract
+     * @return the difference between the two angles
+     */
+    public static double getAlternateAngle(SwerveVector minuend, SwerveVector subtrahend) {
+        //Find the error from -pi to pi, then add 180 to that value and scale it back to the proper domain
+        return convertToAltDomain((minuend.getAngleRadians() + Math.PI - subtrahend.getAngleRadians()) % (Math.PI * 2));
     }
 
     /**
@@ -72,6 +84,15 @@ public class SwerveVector {
     public void addRadsToAngle(double radsToAdd) {
         direction += radsToAdd;
         direction = direction % (Math.PI*2);
+    }
+
+    /**
+     * Convert from 0 to 2PI to -PI to PI
+     * @param angle - angle from 0 to 2pi
+     * @return angle from -PI to PI
+     */
+    public static double convertToAltDomain(double angle) {
+        return angle >= Math.PI ? angle : 2 * Math.PI - angle;
     }
 
     /**
