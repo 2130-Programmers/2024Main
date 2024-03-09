@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
-    static double[] drivePowers = new double[4], steerPowers = new double[4], steerErrors = new double[4];
+    static double[] drivePowers = new double[4], steerPowers = new double[4];
     static int bestTurnDirAllModules = 0;
 
     private final int moduleID;
@@ -44,8 +44,6 @@ public class SwerveModule {
         rotationMotor.set(steerPowers[moduleID]);
     }
 
-
-    boolean isFlipped;
     /**
      * Calculate steering motor power
      * @param moduleVector - vector with target magnitude and angle for swerve module
@@ -69,6 +67,7 @@ public class SwerveModule {
             steerPowers[moduleID] = alternateAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
             drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
         }
+
         SmartDashboard.putNumber("Module " + moduleID + " alternate angle error", alternateAngleError);
         SmartDashboard.putNumber("Module " + moduleID + " raw angle error", rawAngleError);
     }
@@ -104,6 +103,5 @@ public class SwerveModule {
                 drivePowers[i] *= scaleMultiplier;
             }
         }
-
     }
 }
