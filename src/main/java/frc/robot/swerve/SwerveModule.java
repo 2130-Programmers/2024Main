@@ -54,6 +54,9 @@ public class SwerveModule {
         //Update module state
         currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
 
+        //Apply initial drivce power
+        drivePowers[moduleID] = moduleVector.getMagnitude();
+
         // Calculate error for steer motor - error is positive if the module should move ccw.
         // These methods automatically correct for the inneffeciency that arises to avoid turning 270 one way instead of 90 the other
         double rawAngleError = SwerveVector.getClosestAngle(moduleVector, currentState);
@@ -66,49 +69,9 @@ public class SwerveModule {
             steerPowers[moduleID] = alternateAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
             drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
         }
+        SmartDashboard.putNumber("Module " + moduleID + " alternate angle error", alternateAngleError);
+        SmartDashboard.putNumber("Module " + moduleID + " raw angle error", rawAngleError);
     }
-
-
-
-    // public void calcDrive(SwerveVector moduleVector) {
-
-    //     //Update module state
-    //     currentState.setAngleRadians((encoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI));
-
-    //     // Calculate error for steer motor - error is positive if the module should move ccw
-    //     rawAngleError = SwerveVector.subVectorAngles(moduleVector, currentState);
- 
-    //     System.out.println("Raw angle error for module " + moduleID + ": " + rawAngleError);
-
-    //     // Multiply the power by cos of the angle error to allow for both flip code and slowing down wheels that are pointing off target
-    //     drivePowers[moduleID] = Math.cos()
-
-    //     //If drivePower is negative(motor reversed) then flip the actual target as well
-    //     double actualTarget;
-    //     if(drivePowers[moduleID] < 0) {
-    //         actualTarget = (moduleVector.getAngleRadians() + Math.PI) % (Math.PI * 2);
-    //     } else {
-    //         actualTarget = moduleVector.getAngleRadians();
-    //     }
-
-    //     //THE ACTUAL TARGET/ERROR SHOULD BE WITHIN -PI/2 TO PI/2
-
-    //     //Reassign error so that it is only the distance to new desired position
-    //     angleError = actualTarget - currentState.getAngleRadians();
-
-    //     SmartDashboard.putNumber("Module " + moduleID + " calculated error", angleError);
- 
-    //     //If wheel is within deadzone, set power to 0
-    //     int shouldTurn = (Math.abs(angleError) < Constants.DriveTrainConstants.SWERVE_DEADZONE) ? 0 : 1;
-
-    //     //Only remaining thing is to synchronise module turn direction!!!
-
-    //     //Simple proportional feedback loop based on the difference between the
-    //     //module's actual target and current state
-    //     double steerPower = angleError * .3 * shouldTurn;
-
-    //     steerPowers[moduleID] = steerPower;
-    // }
 
     /**
      * Check if each power value is above the limit, and if so set it equal to the limit.

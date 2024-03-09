@@ -41,7 +41,7 @@ public class SwerveVector {
      */
     public static double getClosestAngle(SwerveVector minuend, SwerveVector subtrahend) {
         //Find the error from -pi to pi and scale to proper domain
-        return convertToAltDomain(minuend.getAngleRadians() - subtrahend.getAngleRadians());
+        return convertToAltDomain((minuend.getAngleRadians() - subtrahend.getAngleRadians()) % (2 * Math.PI));
     }
 
     /**
@@ -92,7 +92,7 @@ public class SwerveVector {
      * @return angle from -PI to PI
      */
     public static double convertToAltDomain(double angle) {
-        return angle >= Math.PI ? angle : 2 * Math.PI - angle;
+        return angle <= Math.PI ? angle : 2 * Math.PI - angle;
     }
 
     /**

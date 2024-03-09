@@ -56,10 +56,6 @@ public class DriveTrain extends SubsystemBase {
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 
   public void calculateKinematics(double x, double y, double r) {
-    x *= .25;
-    y *= .25;
-    r *= .25;
-
       /*
       * Simply put, swerve takes a vector for velocity and an angular rotation component as inputs.
       * This function simply handles passing target values to each module(solving kinematics but not coordinating fip/rotations)
@@ -116,7 +112,7 @@ public class DriveTrain extends SubsystemBase {
       brModule.calcDrive(brVector);
 
       SwerveModule.scaleMagnitudes();
-      SwerveModule.scaleSteerPowers();
+      // SwerveModule.scaleSteerPowers();
 
       flModule.applyMotorPowers();
       frModule.applyMotorPowers();

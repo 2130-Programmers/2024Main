@@ -25,6 +25,6 @@ public final class Constants {
     JOYSTICK_DEADZONE = .10,
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
-    TURN_P_GAIN = .05;
+    TURN_P_GAIN = .5;
   }
 }
