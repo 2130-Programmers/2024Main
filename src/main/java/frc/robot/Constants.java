@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int DRIVER_PORT = 0, OPERATOR_PORT = 1;
   }
 
   public static class DriveTrainConstants {
@@ -22,5 +22,14 @@ public final class Constants {
     BOT_LENGTH = 80,
     BOT_WIDTH = 80,
     PI2 = Math.PI * 2;
+  }
+
+  public static class LauncherConstants {
+    public static final double
+    LAUNCH_POWER = 1,
+    ANGLE_POWER = 1,
+    ANGLE_DEADZONE = 50,
+    INTAKE_POWER = 1,
+    LAUNCHER_MAX_ANGLE = 1000;
   }
 }
