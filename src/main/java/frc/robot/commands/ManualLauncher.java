@@ -25,7 +25,7 @@ public class ManualLauncher extends Command {
   @Override
   public void execute() {
     noteHandler.setLaunchPower(RobotContainer.operatorJoy.getRightTriggerAxis());
-    noteHandler.setLaunchPower(RobotContainer.operatorJoy.getLeftTriggerAxis());
+    noteHandler.setIntakePower(RobotContainer.operatorJoy.getLeftTriggerAxis());
     noteHandler.setRotatePower(RobotContainer.operatorJoy.getLeftY());
   }
 
