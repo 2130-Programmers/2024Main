@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
@@ -13,56 +15,59 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
-  static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-  static final PhotonCamera photonLimelight = new PhotonCamera("Photon Limelight");
-  static final PhotonPoseEstimator poseEstimator;
-  static PhotonPipelineResult pipelineResult;
-  static Translation2d camRelativeTarget;
-  static Pose3d robotPosition;
+  final PhotonCamera photonPI = new PhotonCamera("Photon rPI");
+  final PhotonPoseEstimator poseEstimator;
+  AprilTagFieldLayout aprilTagFieldLayout;
+  PhotonPipelineResult pipelineResult;
+  Pose3d robotPose;
 
   /** Creates a new Vision. */
   public Vision() {
-    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, null)
+    try {
+      aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+    } catch(IOException unhandException) {
+      System.out.println("Error loading apriltag field layout");
+    }
+
+    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.CAMERA_RELATIVE_TO_ROBOT);
   }
 
   /**
    * Update the results from vision processing on RIO
    */
-  void updatePipelineResult() {
-    pipelineResult = photonLimelight.getLatestResult();
+  public void updatePipelineResult() {
+    pipelineResult = photonPI.getLatestResult();
   }
 
   /**
-   * Calculate distance to apriltag
-   * @return - the distance in meters
+   * Use the data gathered from apriltags to estimate the robot's pose relative to the BLUE ALLIANCE wall
    */
-  double getDistanceToTarget() {
-    return PhotonUtils.calculateDistanceToTargetMeters(
-    Constants.VisionConstants.CAMERA_HEIGHT_METERS,
-    Constants.VisionConstants.TARGET_HEIGHT_METERS,
-    Constants.VisionConstants.CAMERA_PITCH_RADIANS,
-    Units.degreesToRadians(pipelineResult.getBestTarget().getPitch())
-    );
-  }
-
-  void estimatePose() {
+  public Pose3d estimatePose() {
     updatePipelineResult();
     if(pipelineResult.hasTargets()) {
-       camRelativeTarget = PhotonUtils.estimateCameraToTargetTranslation(getDistanceToTarget(), Rotation2d.fromDegrees(-target.getYaw()));
+      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(pipelineResult.getBestTarget().getBestCameraToTarget(), aprilTagFieldLayout.getTagPose(pipelineResult.getBestTarget().getFiducialId()).get(), Constants.VisionConstants.CAMERA_RELATIVE_TO_ROBOT);
     }
+    return robotPose;
+  }
 
-
-
+  /**
+   * Get the total distance from camera to target
+   * @param target - PhotonTrackedTarget coming from
+   * @return the distance in meters from camera to target
+   */
+  private double getDistanceToTarget(PhotonTrackedTarget target) {
+    //Get the position of the target relative to the robot
+    Transform3d targetPosition = target.getBestCameraToTarget();
+    
+    //Pythagorean theorum to get total distance to target
+    return Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
   }
 
   @Override
