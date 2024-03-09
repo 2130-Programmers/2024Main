@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class NoteHandler extends SubsystemBase {
-  // private static final DigitalInput
-  // bottomDetectionProx = new DigitalInput(0),
-  // noteLaserEye = new DigitalInput(0);
+  private static final DigitalInput
+  bottomDetectionProx = new DigitalInput(0),
+  noteLaserEye = new DigitalInput(1);
 
   private static final TalonFX
   launcherTop = new TalonFX(33),
@@ -61,42 +61,42 @@ public class NoteHandler extends SubsystemBase {
     }
   }
 
-  // /**
-  //  * Move intake to bottom position and zero encoder
-  //  * @return true when the intake has reached zero
-  //  */
-  // public boolean zeroIntake() {
-  //   if(bottomDetectionProx.get()) {
-  //     setRotatePower(.25);
-  //   }else{
-  //     setRotatePower(0);
-  //   }
+  /**
+   * Move intake to bottom position and zero encoder
+   * @return true when the intake has reached zero
+   */
+  public boolean zeroIntake() {
+    if(bottomDetectionProx.get()) {
+      setRotatePower(.25);
+    }else{
+      setRotatePower(0);
+    }
 
-  //   return !bottomDetectionProx.get();
-  // }
+    return !bottomDetectionProx.get();
+  }
 
-  // /**
-  //  * Run intake until note reaches photoeye
-  //  * @return true when the note is in position
-  //  */
-  // public boolean intakeNote() {
-  //   if(!noteLaserEye.get()) {
-  //     setIntakePower(.5);
-  //   }else{
-  //     setIntakePower(0);
-  //   }
+  /**
+   * Run intake until note reaches photoeye
+   * @return true when the note is in position
+   */
+  public boolean intakeNote() {
+    if(!noteLaserEye.get()) {
+      setIntakePower(.5);
+    }else{
+      setIntakePower(0);
+    }
 
-  //   return noteLaserEye.get();
-  // }
+    return noteLaserEye.get();
+  }
 
-  // /**
-  //  * Set the power of intake motors - positive moves the note in
-  //  * @param power - double, from -1 to 1
-  //  */
-  // private void setIntakePower(double power) {
-  //   intakeTop.set(power);
-  //   intakeBottom.set(power);
-  // }
+  /**
+   * Set the power of intake motors - positive moves the note in
+   * @param power - double, from -1 to 1
+   */
+  public void setIntakePower(double power) {
+    intakeTop.set(power);
+    intakeBottom.set(power);
+  }
 
     /**
    * Set the power of launcher motors - positive moves the note in
@@ -120,15 +120,6 @@ public class NoteHandler extends SubsystemBase {
       rotateRight.set(0);
       rotateLeft.set(0);
     }
-  }
-
-  /**
-   * Set the power of the intake rollers
-   * @param power - the power from -1 to 1
-   */
-  public void setIntakePower(double power) {
-    intakeBottom.set(power);
-    intakeTop.set(power);
   }
 
   @Override
