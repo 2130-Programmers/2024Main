@@ -21,6 +21,7 @@ public class RobotContainer {
   // --- SUBSYSTEMS --- \\\
   public static final NoteHandler noteHandler = new NoteHandler();
   public static final DriveTrain driveTrain = new DriveTrain();
+  public static final Vision vision = new Vision();
 
   // --- COMMANDS --- \\\
   private static final ManualLauncher manualLauncher = new ManualLauncher(noteHandler);

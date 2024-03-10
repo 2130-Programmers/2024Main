@@ -45,16 +45,4 @@ public final class Constants {
     INTAKE_POWER = 1,
     LAUNCHER_MAX_ANGLE = 1000;
   }
-
-  public static class VisionConstants {
-    public static final double
-    CAMERA_HEIGHT_METERS = 0,
-    TARGET_HEIGHT_METERS = 0,
-    CAMERA_PITCH_RADIANS = 0;
-
-    /**
-     * Camera position relative to robot origin
-     */
-    public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(CAMERA_HEIGHT_METERS, 0, 0, new Rotation3d());
-  }
 }

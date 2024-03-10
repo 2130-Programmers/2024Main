@@ -11,13 +11,12 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -62,16 +61,21 @@ public class Vision extends SubsystemBase {
    * @param target - PhotonTrackedTarget coming from
    * @return the distance in meters from camera to target
    */
-  private double getDistanceToTarget(PhotonTrackedTarget target) {
-    //Get the position of the target relative to the robot
-    Transform3d targetPosition = target.getBestCameraToTarget();
-    
-    //Pythagorean theorum to get total distance to target
-    return Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
+  public double getDistanceToTarget() {
+    if(pipelineResult.hasTargets()) {
+      //Get the position of the target relative to the robot
+      Transform3d targetPosition = pipelineResult.getBestTarget().getBestCameraToTarget();
+      
+      //Pythagorean theorum to get total distance to target
+      return Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
+    }
+    return 0;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updatePipelineResult();
+    SmartDashboard.putNumber("Reported distance to apriltag in meters: ", getDistanceToTarget());
   }
 }
