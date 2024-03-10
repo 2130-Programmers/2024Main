@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-
+import edu.wpi.first.math.geometry.Translation3d;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -17,15 +17,33 @@ import edu.wpi.first.math.geometry.Transform3d;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int DRIVER_PORT = 0, OPERATOR_PORT = 1;
+    public static final double JOYSTICK_DEADZONE = .10;
+
   }
 
   public static class DriveTrainConstants {
     public static final double
-    BOT_LENGTH = 80,
-    BOT_WIDTH = 80,
+    BOT_LENGTH = .762,
+    BOT_WIDTH = .762,
     PI2 = Math.PI * 2,
-    SWERVE_DEADZONE = Math.PI/12;
+    SWERVE_DEADZONE = Math.PI/12,
+    PEAK_DRIVE_POWER = 1,
+    PEAK_TURN_POWER = 1,
+    TURN_P_GAIN = .5;
+  }
+
+  public static class VisionConstants {
+    public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(new Translation3d(.381, 0, .4699), new Rotation3d(0, .262, 0));
+  }
+
+  public static class LauncherConstants {
+    public static final double
+    LAUNCH_POWER = 1,
+    ANGLE_POWER = 1,
+    ANGLE_DEADZONE = 50,
+    INTAKE_POWER = 1,
+    LAUNCHER_MAX_ANGLE = 1000;
   }
 
   public static class VisionConstants {
