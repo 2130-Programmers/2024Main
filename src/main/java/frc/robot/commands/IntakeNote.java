@@ -12,10 +12,10 @@ public class IntakeNote extends Command {
   private boolean done = false;
 
   /** Creates a new IntakeNote. */
-  public IntakeNote(NoteHandler parentSub) {
+  public IntakeNote(NoteHandler tempSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(parentSub);
-    noteHandler = new NoteHandler();
+    addRequirements(tempSub);
+    noteHandler = tempSub;
   }
 
   // Called when the command is initially scheduled.

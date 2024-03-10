@@ -24,9 +24,9 @@ public class ManualLauncher extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    noteHandler.setLaunchPower(RobotContainer.operatorJoy.getRightTriggerAxis());
-    noteHandler.setIntakePower(RobotContainer.operatorJoy.getLeftTriggerAxis());
-    noteHandler.setRotatePower(RobotContainer.operatorJoy.getLeftY());
+    noteHandler.setLaunchPower(RobotContainer.operatorGamepad.getRightTriggerAxis());
+    noteHandler.setIntakePower(RobotContainer.operatorGamepad.getLeftTriggerAxis());
+    noteHandler.setRotatePower(RobotContainer.operatorGamepad.getLeftY());
   }
 
   // Called once the command ends or is interrupted.

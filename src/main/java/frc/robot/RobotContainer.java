@@ -30,16 +30,15 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
     public static final CommandXboxController
       driverGamepad = new CommandXboxController(OperatorConstants.DRIVER_PORT),
-      operatorJoy = new CommandXboxController(OperatorConstants.OPERATOR_PORT);
+      operatorGamepad = new CommandXboxController(OperatorConstants.OPERATOR_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
 
-    //Set default command so that it runs periodically
-    driveTrain.setDefaultCommand(teleDriveCommand);
     //Set default commands(will run when no other command is using subystem)
+    driveTrain.setDefaultCommand(teleDriveCommand);
     noteHandler.setDefaultCommand(manualLauncher);
   }
 
