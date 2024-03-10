@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -45,5 +44,17 @@ public final class Constants {
     ANGLE_DEADZONE = 50,
     INTAKE_POWER = 1,
     LAUNCHER_MAX_ANGLE = 1000;
+  }
+
+  public static class VisionConstants {
+    public static final double
+    CAMERA_HEIGHT_METERS = 0,
+    TARGET_HEIGHT_METERS = 0,
+    CAMERA_PITCH_RADIANS = 0;
+
+    /**
+     * Camera position relative to robot origin
+     */
+    public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(CAMERA_HEIGHT_METERS, 0, 0, new Rotation3d());
   }
 }
