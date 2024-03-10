@@ -14,7 +14,8 @@ package frc.robot;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int DRIVER_PORT = 0;
+    public static final int DRIVER_PORT = 0, OPERATOR_PORT = 1;
+
   }
 
   public static class DriveTrainConstants {
@@ -26,5 +27,14 @@ public final class Constants {
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
     TURN_P_GAIN = .5;
+  }
+
+  public static class LauncherConstants {
+    public static final double
+    LAUNCH_POWER = 1,
+    ANGLE_POWER = 1,
+    ANGLE_DEADZONE = 50,
+    INTAKE_POWER = 1,
+    LAUNCHER_MAX_ANGLE = 1000;
   }
 }
