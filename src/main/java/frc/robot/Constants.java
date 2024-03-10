@@ -15,13 +15,18 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_PORT = 0, OPERATOR_PORT = 1;
+
   }
 
   public static class DriveTrainConstants {
     public static final double
     BOT_LENGTH = 80,
     BOT_WIDTH = 80,
-    PI2 = Math.PI * 2;
+    SWERVE_DEADZONE = Math.PI/18,
+    JOYSTICK_DEADZONE = .10,
+    PEAK_DRIVE_POWER = 1,
+    PEAK_TURN_POWER = 1,
+    TURN_P_GAIN = .5;
   }
 
   public static class LauncherConstants {

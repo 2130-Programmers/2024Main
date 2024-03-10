@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ManualLauncher;
 import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,20 +21,24 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // --- SUBSYSTEMS --- \\\
   public static final NoteHandler noteHandler = new NoteHandler();
+  public static final DriveTrain driveTrain = new DriveTrain();
 
   // --- COMMANDS --- \\\
   private static final ManualLauncher manualLauncher = new ManualLauncher(noteHandler);
+  public static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  public static final CommandXboxController
-  driverJoy = new CommandXboxController(OperatorConstants.DRIVER_PORT),
-  operatorJoy = new CommandXboxController(OperatorConstants.OPERATOR_PORT);
+    public static final CommandXboxController
+      driverGamepad = new CommandXboxController(OperatorConstants.DRIVER_PORT),
+      operatorJoy = new CommandXboxController(OperatorConstants.OPERATOR_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
 
+    //Set default command so that it runs periodically
+    driveTrain.setDefaultCommand(teleDriveCommand);
     //Set default commands(will run when no other command is using subystem)
     noteHandler.setDefaultCommand(manualLauncher);
   }
