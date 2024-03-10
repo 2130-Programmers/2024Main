@@ -16,8 +16,8 @@ import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
   private static final CANSparkMax
-  flRotationMotor = new CANSparkMax(10, MotorType.kBrushless),
-  frRotationMotor = new CANSparkMax(12, MotorType.kBrushless),
+  flRotationMotor = new CANSparkMax(12, MotorType.kBrushless),
+  frRotationMotor = new CANSparkMax(10, MotorType.kBrushless),
   blRotationMotor = new CANSparkMax(14, MotorType.kBrushless),
   brRotationMotor = new CANSparkMax(16, MotorType.kBrushless),
   flDriveMotor = new CANSparkMax(11, MotorType.kBrushless),

@@ -14,14 +14,14 @@ package frc.robot;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int DRIVER_PORT = 0;
   }
 
   public static class DriveTrainConstants {
     public static final double
     BOT_LENGTH = 80,
     BOT_WIDTH = 80,
-    SWERVE_DEADZONE = Math.PI/12,
+    SWERVE_DEADZONE = Math.PI/18,
     JOYSTICK_DEADZONE = .10,
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,

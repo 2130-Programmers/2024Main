@@ -62,14 +62,13 @@ public class SwerveModule {
 
         if(Math.abs(rawAngleError) < Math.abs(alternateAngleError)) {
             steerPowers[moduleID] = rawAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
+            SmartDashboard.putNumber("Module " + moduleID + " used error", rawAngleError);
             drivePowers[moduleID] *= Math.abs(Math.cos(rawAngleError));
         } else {
             steerPowers[moduleID] = alternateAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
+            SmartDashboard.putNumber("Module " + moduleID + " used error", alternateAngleError);
             drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
         }
-
-        SmartDashboard.putNumber("Module " + moduleID + " alternate angle error", alternateAngleError);
-        SmartDashboard.putNumber("Module " + moduleID + " raw angle error", rawAngleError);
     }
 
     /**
