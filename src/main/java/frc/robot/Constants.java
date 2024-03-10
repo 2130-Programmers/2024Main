@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 public final class Constants {
   public static class OperatorConstants {
     public static final int DRIVER_PORT = 0, OPERATOR_PORT = 1;
+    public static final double JOYSTICK_DEADZONE = .10;
 
   }
 
@@ -27,18 +28,14 @@ public final class Constants {
     BOT_LENGTH = .762,
     BOT_WIDTH = .762,
     PI2 = Math.PI * 2,
-    SWERVE_DEADZONE = Math.PI/12;
+    SWERVE_DEADZONE = Math.PI/12,
+    PEAK_DRIVE_POWER = 1,
+    PEAK_TURN_POWER = 1,
+    TURN_P_GAIN = .5;
   }
 
   public static class VisionConstants {
     public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(new Translation3d(.381, 0, .4699), new Rotation3d(0, .262, 0));
-    BOT_LENGTH = 80,
-    BOT_WIDTH = 80,
-    SWERVE_DEADZONE = Math.PI/18,
-    JOYSTICK_DEADZONE = .10,
-    PEAK_DRIVE_POWER = 1,
-    PEAK_TURN_POWER = 1,
-    TURN_P_GAIN = .5;
   }
 
   public static class LauncherConstants {

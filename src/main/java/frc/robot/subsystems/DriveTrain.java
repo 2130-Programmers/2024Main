@@ -73,9 +73,9 @@ public class DriveTrain extends SubsystemBase {
       * Good resource that covers what is done here: https://dominik.win/blog/programming-swerve-drive/
       */
 
-      x = (Math.abs(x) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : x;
-      y = (Math.abs(y) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : y;
-      r = (Math.abs(r) < Constants.DriveTrainConstants.JOYSTICK_DEADZONE) ? 0 : r;
+      x = (Math.abs(x) < Constants.OperatorConstants.JOYSTICK_DEADZONE) ? 0 : x;
+      y = (Math.abs(y) < Constants.OperatorConstants.JOYSTICK_DEADZONE) ? 0 : y;
+      r = (Math.abs(r) < Constants.OperatorConstants.JOYSTICK_DEADZONE) ? 0 : r;
 
       //Vectors to pass to the swerve modules every loop
       SwerveVector flVector, frVector, blVector, brVector;
