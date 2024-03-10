@@ -34,9 +34,9 @@ public class NoteHandler extends SubsystemBase {
     rotateLeft.setInverted(false);
     rotateLeft.setNeutralMode(NeutralModeValue.Brake);
     rotateRight.setNeutralMode(NeutralModeValue.Brake);
-    launcherTop.setInverted(true);
-    launcherBottom.setInverted(false);
-    intakeTop.setInverted(true);
+    launcherTop.setInverted(false);
+    launcherBottom.setInverted(true);
+    intakeTop.setInverted(false);
     intakeBottom.setInverted(false);
   }
 

@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -19,9 +23,14 @@ public final class Constants {
 
   public static class DriveTrainConstants {
     public static final double
-    BOT_LENGTH = 80,
-    BOT_WIDTH = 80,
-    PI2 = Math.PI * 2;
+    BOT_LENGTH = .762,
+    BOT_WIDTH = .762,
+    PI2 = Math.PI * 2,
+    SWERVE_DEADZONE = Math.PI/12;
+  }
+
+  public static class VisionConstants {
+    public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(new Translation3d(.381, 0, .4699), new Rotation3d(0, .262, 0));
   }
 
   public static class LauncherConstants {
