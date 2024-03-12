@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
@@ -17,7 +18,7 @@ import frc.robot.Constants;
 public class NoteHandler extends SubsystemBase {
   private static final DigitalInput
   bottomDetectionProx = new DigitalInput(0),
-  noteLaserEye = new DigitalInput(1);
+  noteLimitSwitch = new DigitalInput(1);
 
   private static final TalonFX
   launcherTop = new TalonFX(33),
@@ -86,18 +87,23 @@ public class NoteHandler extends SubsystemBase {
     return !bottomDetectionProx.get();
   }
 
+  boolean readyLauncher(int targetSpeed) {
+    // launcherTop.setControl()f
+    return false;
+  }
+
   /**
    * Run intake until note reaches photoeye
    * @return true when the note is in position
    */
   public boolean intakeNote() {
-    if(!noteLaserEye.get()) {
-      setIntakePower(.5);
+    if(!noteLimitSwitch.get()) {
+      setIntakePower(.4);
     }else{
       setIntakePower(0);
     }
 
-    return noteLaserEye.get();
+    return noteLimitSwitch.get();
   }
 
   /**
@@ -136,6 +142,6 @@ public class NoteHandler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Handler detection prox raw value", bottomDetectionProx.get());
+    SmartDashboard.putBoolean("Note detection switch value", noteLimitSwitch.get());
   }
 }

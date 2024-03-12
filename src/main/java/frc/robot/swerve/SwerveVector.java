@@ -41,7 +41,13 @@ public class SwerveVector {
      */
     public static double getClosestAngle(SwerveVector minuend, SwerveVector subtrahend) {
         //Find the error from -pi to pi and scale to proper domain
-        return convertToAltDomain((minuend.getAngleRadians() - subtrahend.getAngleRadians()) % (2 * Math.PI));
+        double dir = convertToAltDomain((minuend.getAngleRadians() - subtrahend.getAngleRadians()));
+        if (Math.abs(dir) > Math.PI)
+        {
+                dir = -(Math.signum(dir) * Math.PI * 2) + dir;
+        }
+
+        return dir;
     }
 
     /**
@@ -52,7 +58,13 @@ public class SwerveVector {
      */
     public static double getAlternateAngle(SwerveVector minuend, SwerveVector subtrahend) {
         //Find the error from -pi to pi, then add 180 to that value and scale it back to the proper domain
-        return convertToAltDomain((minuend.getAngleRadians() + Math.PI - subtrahend.getAngleRadians()) % (Math.PI * 2));
+        double dir = convertToAltDomain((minuend.getAngleRadians() + Math.PI - subtrahend.getAngleRadians()) % (Math.PI * 2));
+        if (Math.abs(dir) > Math.PI)
+        {
+                dir = -(Math.signum(dir) * Math.PI * 2) + dir;
+        }
+
+        return dir;
     }
 
     /**

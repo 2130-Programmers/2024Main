@@ -5,10 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ManualLauncher;
-import frc.robot.commands.vision.AngleFromAprilTag;
-import frc.robot.commands.vision.LaunchPowerFromAprilTag;
-import frc.robot.commands.vision.PointAtNote;
+import frc.robot.commands.vision.*;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,6 +56,7 @@ public class RobotContainer {
     driverGamepad.leftBumper().whileTrue(pointAtNote);
     driverGamepad.rightBumper().whileTrue(altDrive);
     driverGamepad.a().onTrue(zeroHandler);
+    driverGamepad.y().onTrue(intakeNote);
   }
 
   /**
