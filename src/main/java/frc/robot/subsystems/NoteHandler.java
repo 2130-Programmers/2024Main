@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -51,10 +50,10 @@ public class NoteHandler extends SubsystemBase {
       throw new Error("Target launcher angle out of bounds");
     }
 
-    double angleError = (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2;
+    double currentAngle = (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2;
 
-    if(Math.abs(angleError) > Constants.LauncherConstants.ANGLE_DEADZONE) {
-      setRotatePower(angleError * Constants.LauncherConstants.ANGLE_POWER);
+    if(Math.abs(currentAngle) > Constants.LauncherConstants.ANGLE_DEADZONE) {
+      setRotatePower(currentAngle * -Constants.LauncherConstants.ANGLE_POWER);
       return true;
     }else{
       setRotatePower(0);
@@ -78,7 +77,7 @@ public class NoteHandler extends SubsystemBase {
    */
   public boolean zeroIntake() {
     if(bottomDetectionProx.get()) {
-      setRotatePower(.25);
+      setRotatePower(-.25);
     }else{
       setRotatePower(0);
     }
@@ -125,8 +124,8 @@ public class NoteHandler extends SubsystemBase {
    */
   public void setRotatePower(double power) {
     if(Math.abs(power) > .05) {
-      rotateLeft.set(power * .25);
-      rotateRight.set(power * .25);
+      rotateLeft.set(power * -.25);
+      rotateRight.set(power * -.25);
     } else {
       rotateRight.set(0);
       rotateLeft.set(0);

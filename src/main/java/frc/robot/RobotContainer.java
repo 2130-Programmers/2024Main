@@ -6,6 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ManualLauncher;
+import frc.robot.commands.vision.AngleFromAprilTag;
+import frc.robot.commands.vision.LaunchPowerFromAprilTag;
+import frc.robot.commands.vision.PointAtNote;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,11 +24,16 @@ public class RobotContainer {
   // --- SUBSYSTEMS --- \\\
   public static final NoteHandler noteHandler = new NoteHandler();
   public static final DriveTrain driveTrain = new DriveTrain();
-  public static final Vision vision = new Vision();
+  public static final PiVision piVision = new PiVision();
+  public static final LimelightVision limelightVision = new LimelightVision();
 
   // --- COMMANDS --- \\\
+  private static final IntakeNote intakeNote = new IntakeNote(noteHandler);
   private static final ManualLauncher manualLauncher = new ManualLauncher(noteHandler);
-  public static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
+  private static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
+  private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(noteHandler, piVision);
+  private static final LaunchPowerFromAprilTag launchPowerFromAprilTag = new LaunchPowerFromAprilTag(noteHandler, piVision);
+  private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
     public static final CommandXboxController

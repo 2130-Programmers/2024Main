@@ -5,18 +5,20 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
-import frc.robot.subsystems.PiVision;
+import frc.robot.Constants;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.LimelightVision;
 
-public class LaunchPowerFromAprilTag extends Command {
-  private final NoteHandler noteHandler;
-  private final PiVision vision;
-  /** Creates a new LaunchPowerFromAprilTag. */
-  public LaunchPowerFromAprilTag(NoteHandler noteHandler, PiVision vision) {
+public class PointAtNote extends Command {
+  DriveTrain driveTrain;
+  LimelightVision limelightVision;
+  private double angleError;
+  /** Creates a new PointAtNote. */
+  public PointAtNote(DriveTrain driveTrain, LimelightVision limelightVision) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(noteHandler, vision);
-    this.noteHandler = noteHandler;
-    this.vision = vision;
+    addRequirements(driveTrain, limelightVision);
+    this.driveTrain = driveTrain;
+    this.limelightVision = limelightVision;
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +28,8 @@ public class LaunchPowerFromAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    noteHandler.setLaunchPower(vision.getDistanceToTarget() * .08 + .2);
+    angleError = limelightVision.angleToNearestNote();
+    driveTrain.calculateKinematics(0, 0, angleError * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +39,6 @@ public class LaunchPowerFromAprilTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(angleError) < 1.5;
   }
 }

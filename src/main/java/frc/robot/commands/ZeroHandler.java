@@ -2,20 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.vision;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NoteHandler;
-import frc.robot.subsystems.PiVision;
 
-public class AngleFromAprilTag extends Command {
-  private final NoteHandler noteHandler;
-  private final PiVision vision;
-  /** Creates a new AprilTagLauncher. */
-  public AngleFromAprilTag(NoteHandler noteHandler, PiVision vision) {
-    addRequirements(noteHandler, vision);
+public class ZeroHandler extends Command {
+  private NoteHandler noteHandler;
+  private boolean done;
+  /** Creates a new ZeroLauncher. */
+  public ZeroHandler(NoteHandler noteHandler) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(noteHandler);
     this.noteHandler = noteHandler;
-    this.vision = vision;
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +24,7 @@ public class AngleFromAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    noteHandler.angleFromDistance(vision.getDistanceToTarget());
+    done = noteHandler.zeroIntake();
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +34,6 @@ public class AngleFromAprilTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }

@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Vision extends SubsystemBase {
+public class PiVision extends SubsystemBase {
   final PhotonCamera photonPI = new PhotonCamera("Photon rPI");
   final PhotonPoseEstimator poseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
@@ -28,7 +28,7 @@ public class Vision extends SubsystemBase {
   Pose3d robotPose;
 
   /** Creates a new Vision. */
-  public Vision() {
+  public PiVision() {
     try {
       aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
     } catch(IOException unhandException) {

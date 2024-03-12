@@ -9,6 +9,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -97,7 +99,6 @@ public class DriveTrain extends SubsystemBase {
 
       //Convert joystick inputs to polar/vector
       //This is the translational component of our swerve inputs.
-      SmartDashboard.putNumber("safe atan", SwerveVector.safeAtan2(y, x));
       SwerveVector translationVector = new SwerveVector(SwerveVector.safeAtan2(y, x), Math.sqrt((x * x) + (y * y)));
       
       //Combine the translation and rotation components for each module

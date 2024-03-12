@@ -30,7 +30,9 @@ public final class Constants {
     SWERVE_DEADZONE = Math.PI/12,
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
-    TURN_P_GAIN = .5;
+    TURN_P_GAIN = .6,
+    AUTO_TRANSLATION_GAIN = .1,
+    AUTO_ROTATION_GAIN = .1;
   }
 
   public static class VisionConstants {
