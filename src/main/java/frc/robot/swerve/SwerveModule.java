@@ -68,6 +68,7 @@ public class SwerveModule {
             SmartDashboard.putNumber("Module " + moduleID + " used error", alternateAngleError);
             drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
         }
+
     }
 
     /**

@@ -76,7 +76,6 @@ public class SwerveVector {
         //Convert to new vector with direction and magnitude
         return new SwerveVector(safeAtan2(mY, mX), Math.sqrt((mX * mX) + (mY * mY)));
     }
-
     /**
      * Add to angle of vector
      * @param radsToAdd - amount in radians to add
