@@ -66,8 +66,6 @@ public class SwerveModule {
             drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
         }
 
-        // steerPowers[moduleID] = rawAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
-        // drivePowers[moduleID] *= Math.abs(Math.cos(rawAngleError));
     }
 
     /**

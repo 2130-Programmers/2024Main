@@ -4,8 +4,11 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.commands.TeleDriveCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimelightVision;
 
@@ -29,7 +32,8 @@ public class PointAtNote extends Command {
   @Override
   public void execute() {
     angleError = limelightVision.angleToNearestNote();
-    driveTrain.calculateKinematics(0, 0, angleError * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN);
+    driveTrain.calculateKinematics( RobotContainer.driverGamepad.getLeftX() * -1,  RobotContainer.driverGamepad.getLeftY(), angleError * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN * (1 - limelightVision.getTargetArea()));
+    SmartDashboard.putNumber("Angle Error is  ", + angleError);
   }
 
   // Called once the command ends or is interrupted.

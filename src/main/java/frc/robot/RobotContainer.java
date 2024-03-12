@@ -36,7 +36,7 @@ public class RobotContainer {
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
   private static final ZeroHandler zeroHandler = new ZeroHandler(noteHandler);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Replace with CommandXboxController or CommandJoystick if needed
     public static final CommandXboxController
       driverGamepad = new CommandXboxController(OperatorConstants.DRIVER_PORT),
       operatorGamepad = new CommandXboxController(OperatorConstants.OPERATOR_PORT);

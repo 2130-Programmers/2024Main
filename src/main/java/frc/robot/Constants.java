@@ -32,7 +32,8 @@ public final class Constants {
     PEAK_TURN_POWER = 1,
     TURN_P_GAIN = .6,
     AUTO_TRANSLATION_GAIN = .1,
-    AUTO_ROTATION_GAIN = .1;
+    AUTO_ROTATION_GAIN = .35;
+    
   }
 
   public static class VisionConstants {

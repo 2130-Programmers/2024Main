@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightVision extends SubsystemBase {
   private final NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-  private final NetworkTableEntry xError = limelightTable.getEntry("tx");
+  private final NetworkTableEntry xError = limelightTable.getEntry("tx"), targetArea = limelightTable.getEntry("ta");
   /** Creates a new LimelightVision. */
   public LimelightVision() {}
 
@@ -22,6 +22,10 @@ public class LimelightVision extends SubsystemBase {
    */
   public double angleToNearestNote() {
     return xError.getDouble(0);
+  }
+
+  public double getTargetArea() {
+    return targetArea.getDouble(0);
   }
 
   @Override
