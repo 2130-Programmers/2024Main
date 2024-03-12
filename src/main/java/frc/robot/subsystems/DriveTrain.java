@@ -8,12 +8,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.swerve.*;
 
 public class DriveTrain extends SubsystemBase {
@@ -119,6 +117,43 @@ public class DriveTrain extends SubsystemBase {
       frModule.applyMotorPowers();
       blModule.applyMotorPowers();
       brModule.applyMotorPowers();
+  }
+
+  /**
+   * Field relative drive mode
+   * @param x - x translation input
+   * @param y - y translation input
+   * @param twist - rotation input
+   * @param driveMultiplier - multiplier for translation
+   */
+  public void altDrive(double x, double y, double twist, double driveMultiplier) {
+    y*=-1;
+    double gyroWrapped = Math.toRadians(RobotContainer.gyro.gyroYaw() % 360);
+    double targetAngle = Math.atan2(y, x);
+    double angleDif = targetAngle - gyroWrapped;
+    double radius = Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
+
+      calculateKinematics(Math.cos(angleDif)*radius*driveMultiplier*-1,
+                          Math.sin(angleDif)*radius*driveMultiplier,
+                          twist);
+  }
+
+    /**
+   * Field relative drive mode
+   * @param x - x translation input
+   * @param y - y translation input
+   * @param twist - rotation input
+   */
+  public void altDrive(double x, double y, double twist) {
+    y*=-1;
+    double gyroWrapped = Math.toRadians(RobotContainer.gyro.gyroYaw() % 360);
+    double targetAngle = Math.atan2(y, x);
+    double angleDif = targetAngle - gyroWrapped;
+    double radius = Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
+
+      calculateKinematics(Math.cos(angleDif)*radius*-1,
+                          Math.sin(angleDif)*radius,
+                          twist);
   }
 
   @Override

@@ -26,14 +26,18 @@ public class RobotContainer {
   public static final DriveTrain driveTrain = new DriveTrain();
   public static final PiVision piVision = new PiVision();
   public static final LimelightVision limelightVision = new LimelightVision();
+  public static final Gyro gyro = new Gyro();
 
   // --- COMMANDS --- \\\
+  //Drivetrain
+  private static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
+  private static final AltDrive altDrive = new AltDrive(driveTrain);
   private static final IntakeNote intakeNote = new IntakeNote(noteHandler);
   private static final ManualLauncher manualLauncher = new ManualLauncher(noteHandler);
-  private static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
   private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(noteHandler, piVision);
   private static final LaunchPowerFromAprilTag launchPowerFromAprilTag = new LaunchPowerFromAprilTag(noteHandler, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
+  private static final ZeroHandler zeroHandler = new ZeroHandler(noteHandler);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
     public static final CommandXboxController
@@ -52,6 +56,9 @@ public class RobotContainer {
 
 
   private void configureBindings() {
+    driverGamepad.leftBumper().whileTrue(pointAtNote);
+    driverGamepad.rightBumper().whileTrue(altDrive);
+    driverGamepad.a().onTrue(zeroHandler);
   }
 
   /**

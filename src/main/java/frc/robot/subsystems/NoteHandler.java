@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -77,7 +78,7 @@ public class NoteHandler extends SubsystemBase {
    */
   public boolean zeroIntake() {
     if(bottomDetectionProx.get()) {
-      setRotatePower(-.25);
+      setRotatePower(-.4);
     }else{
       setRotatePower(0);
     }
@@ -124,8 +125,8 @@ public class NoteHandler extends SubsystemBase {
    */
   public void setRotatePower(double power) {
     if(Math.abs(power) > .05) {
-      rotateLeft.set(power * -.25);
-      rotateRight.set(power * -.25);
+      rotateLeft.set(power * .25);
+      rotateRight.set(power * .25);
     } else {
       rotateRight.set(0);
       rotateLeft.set(0);
@@ -135,5 +136,6 @@ public class NoteHandler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Handler detection prox raw value", bottomDetectionProx.get());
   }
 }
