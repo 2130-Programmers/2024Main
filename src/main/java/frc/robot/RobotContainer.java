@@ -30,16 +30,28 @@ public class RobotContainer {
   private static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
   private static final AltDrive altDrive = new AltDrive(driveTrain);
   private static final IntakeNote intakeNote = new IntakeNote(noteHandler);
-  private static final ManualLauncher manualLauncher = new ManualLauncher(noteHandler);
   private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(noteHandler, piVision);
   private static final LaunchPowerFromAprilTag launchPowerFromAprilTag = new LaunchPowerFromAprilTag(noteHandler, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
   private static final ZeroHandler zeroHandler = new ZeroHandler(noteHandler);
+  private static final LaunchNote launchNote = new LaunchNote(noteHandler);
+  private static final SpinLauncher spinLauncher = new SpinLauncher(noteHandler);
+  private static final StopNoteHandlerMotors stopNoteHandlerMotors = new StopNoteHandlerMotors(noteHandler);
 
   // Replace with CommandXboxController or CommandJoystick if needed
     public static final CommandXboxController
       driverGamepad = new CommandXboxController(OperatorConstants.DRIVER_PORT),
       operatorGamepad = new CommandXboxController(OperatorConstants.OPERATOR_PORT);
+
+  private void configureBindings() {
+    driverGamepad.leftBumper().whileTrue(pointAtNote);
+    driverGamepad.rightBumper().whileTrue(altDrive);
+    operatorGamepad.a().onTrue(intakeNote);
+    operatorGamepad.b().onTrue(zeroHandler);
+    operatorGamepad.x().whileTrue(angleFromAprilTag);
+    operatorGamepad.leftTrigger().onTrue(launchNote);
+    operatorGamepad.y().whileTrue(spinLauncher);
+  }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -48,15 +60,7 @@ public class RobotContainer {
 
     //Set default commands(will run when no other command is using subystem)
     driveTrain.setDefaultCommand(teleDriveCommand);
-    noteHandler.setDefaultCommand(manualLauncher);
-  }
-
-
-  private void configureBindings() {
-    driverGamepad.leftBumper().whileTrue(pointAtNote);
-    driverGamepad.rightBumper().whileTrue(altDrive);
-    driverGamepad.a().onTrue(zeroHandler);
-    driverGamepad.y().onTrue(intakeNote);
+    noteHandler.setDefaultCommand(stopNoteHandlerMotors);
   }
 
   /**

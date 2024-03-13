@@ -5,33 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.NoteHandler;
 
-public class ManualLauncher extends Command {
+public class LaunchNote extends Command {
   NoteHandler noteHandler;
-  /** Creates a new ManualLauncher. */
-  public ManualLauncher(NoteHandler tempSub) {
+  /** Creates a new LaunchNote. */
+  public LaunchNote(NoteHandler noteHandler) {
     // Use addRequirements() here to declare subsystem dependencies.
-    noteHandler = tempSub;
-    addRequirements(tempSub);
+    addRequirements(noteHandler);
+    this.noteHandler = noteHandler;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    noteHandler.setIntakePower(.25);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    noteHandler.setLaunchPower(RobotContainer.operatorGamepad.getRightTriggerAxis());
-    noteHandler.setIntakePower(RobotContainer.operatorGamepad.getLeftTriggerAxis());
-    noteHandler.setRotatePower(RobotContainer.operatorGamepad.getLeftY());
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    noteHandler.setIntakePower(0);
+  }
 
   // Returns true when the command should end.
   @Override

@@ -24,6 +24,9 @@ public class LimelightVision extends SubsystemBase {
     return xError.getDouble(0);
   }
 
+  /**
+   * Get the percentage of the cameras vision field taken up by the target
+   */
   public double getTargetArea() {
     return targetArea.getDouble(0);
   }

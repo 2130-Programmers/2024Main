@@ -30,7 +30,7 @@ public final class Constants {
     SWERVE_DEADZONE = Math.PI/12,
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
-    TURN_P_GAIN = .6,
+    TURN_P_GAIN = .8,
     AUTO_TRANSLATION_GAIN = .1,
     AUTO_ROTATION_GAIN = .35;
     
@@ -42,10 +42,12 @@ public final class Constants {
 
   public static class LauncherConstants {
     public static final double
+    ENCODER_TO_RADIANS = 0.139105,
+    RADIANS_TO_ENCODER = 7.196722,
     LAUNCH_POWER = 1,
-    ANGLE_POWER = 1,
-    ANGLE_DEADZONE = 50,
+    ANGLE_POWER = .35,
+    ANGLE_DEADZONE = .1,
     INTAKE_POWER = 1,
-    LAUNCHER_MAX_ANGLE = 1000;
+    LAUNCHER_MAX_ANGLE = 31;
   }
 }

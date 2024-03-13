@@ -62,7 +62,7 @@ public class PiVision extends SubsystemBase {
    * @return the distance in meters from camera to target
    */
   public double getDistanceToTarget() {
-    if(pipelineResult.hasTargets()) {
+    if(pipelineResult.hasTargets() && (pipelineResult.getBestTarget().getFiducialId() == 4 || pipelineResult.getBestTarget().getFiducialId() == 3)) {
       //Get the position of the target relative to the robot
       Transform3d targetPosition = pipelineResult.getBestTarget().getBestCameraToTarget();
       

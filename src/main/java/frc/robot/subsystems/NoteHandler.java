@@ -40,6 +40,9 @@ public class NoteHandler extends SubsystemBase {
     launcherBottom.setInverted(true);
     intakeTop.setInverted(false);
     intakeBottom.setInverted(false);
+
+    rotateLeft.setPosition(0);
+    rotateRight.setPosition(0);
   }
 
   /**
@@ -52,15 +55,10 @@ public class NoteHandler extends SubsystemBase {
       throw new Error("Target launcher angle out of bounds");
     }
 
-    double currentAngle = (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2;
+    double angleError = angle - (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2;
 
-    if(Math.abs(currentAngle) > Constants.LauncherConstants.ANGLE_DEADZONE) {
-      setRotatePower(currentAngle * -Constants.LauncherConstants.ANGLE_POWER);
-      return true;
-    }else{
-      setRotatePower(0);
-      return false;
-    }
+    setRotatePower(angleError * Constants.LauncherConstants.ANGLE_POWER);
+    return false;
   }
 
   /**
@@ -70,7 +68,12 @@ public class NoteHandler extends SubsystemBase {
   public void angleFromDistance(double distanceToTarget) {
     //Move to point in a line directly at the speaker(6ft off the ground)
     //Then add a small amount of extra angle that scales with distance from the target
-    moveToAngle(Math.atan2(2, distanceToTarget) + distanceToTarget * .1);
+    double targetAngle = Constants.LauncherConstants.RADIANS_TO_ENCODER * (Math.atan2(2, distanceToTarget));
+    if(targetAngle < 15) {
+      moveToAngle(targetAngle);
+    }else{
+      moveToAngle(0);
+    }
   }
 
   /**
@@ -87,8 +90,17 @@ public class NoteHandler extends SubsystemBase {
     return !bottomDetectionProx.get();
   }
 
+
+  /**
+   * Check if there is a note present
+   * @return - true if there is a note in the launcher
+   */
+  public boolean notePresent() {
+    return noteLimitSwitch.get();
+  }
+
   boolean readyLauncher(int targetSpeed) {
-    // launcherTop.setControl()f
+    // launcherTop.setControl()
     return false;
   }
 
@@ -142,6 +154,6 @@ public class NoteHandler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Note detection switch value", noteLimitSwitch.get());
+    SmartDashboard.putNumber("Launcher angle measurement", (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2);
   }
 }
