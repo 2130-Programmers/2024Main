@@ -4,25 +4,23 @@
 
 package frc.robot.commands.autonomous.commandGroups;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.commands.launcher.LaunchNote;
-import frc.robot.commands.launcher.SpinLauncher;
-import frc.robot.commands.launcher.StopHandlerMotors;
+import frc.robot.commands.autonomous.GoToLocation;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoShoot extends SequentialCommandGroup {
-  /** Creates a new AutoShoot. */
-  public AutoShoot() {
+public class TestDriveRoute extends SequentialCommandGroup {
+  /** Creates a new TestDriveRoute. */
+  public TestDriveRoute() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveAndIntakeNote(),
-      new SpinLauncher(RobotContainer.noteHandler, 5000),
-      new LaunchNote(RobotContainer.noteHandler),
-      new StopHandlerMotors(RobotContainer.noteHandler)
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(10, 10, new Rotation2d(0))),
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(15, -5, new Rotation2d(Math.PI)))
     );
   }
 }

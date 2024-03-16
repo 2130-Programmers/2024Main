@@ -3,6 +3,8 @@ package frc.robot.swerve;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -43,6 +45,14 @@ public class SwerveModule {
     }
 
     /**
+     * Get the distance traveled and current angle of the swerve module
+     * @return - SwerveModulePosition with the encoder values for rotation and translation
+     */
+    public SwerveModulePosition getModulePosition() {
+        return new SwerveModulePosition(driveMotor.getEncoder().getPosition(), currentState.getRotation2d());
+    }
+
+    /**
      * Calculate steering motor power
      * @param moduleVector - vector with target magnitude and angle for swerve module
      */
@@ -65,6 +75,9 @@ public class SwerveModule {
             steerPowers[moduleID] = alternateAngleError * Constants.DriveTrainConstants.TURN_P_GAIN;
             drivePowers[moduleID] *= -Math.abs(Math.cos(alternateAngleError));
         }
+
+        if(moduleVector.getMagnitude() < .05)
+            steerPowers[moduleID] = 0;
 
     }
 

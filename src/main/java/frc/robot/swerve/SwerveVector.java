@@ -1,5 +1,7 @@
 package frc.robot.swerve;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public class SwerveVector {
     private double direction, power;
     
@@ -118,7 +120,7 @@ public class SwerveVector {
      * Gets the vector angle in degrees
      * @return angle in degrees from 0 to 360
      */
-    public double getAngleDegrees(){
+    public double getAngleDegrees() {
         return direction * 57.29578;
     }
 
@@ -126,8 +128,16 @@ public class SwerveVector {
      * Gets the vector angle in radians
      * @return angle in degrees from 0 to 2pi
      */
-    public double getAngleRadians(){
+    public double getAngleRadians() {
         return direction;
+    }
+
+    /**
+     * Get the angle of the vector as a rotation2d
+     * @return - rotation2d with th evector angle in radians
+     */
+    public Rotation2d getRotation2d() {
+        return new Rotation2d(direction);
     }
 
     /**

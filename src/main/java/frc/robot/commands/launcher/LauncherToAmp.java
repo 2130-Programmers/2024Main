@@ -2,17 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NoteHandler;
 
 
-public class MoveToAmp extends Command {
+public class LauncherToAmp extends Command {
   /** Creates a new MoveToAmp. */
-  NoteHandler noteHandler;
-  public MoveToAmp(NoteHandler noteHandler) {
-    MoveToAmp moveToAmp;
+  private NoteHandler noteHandler;
+  public LauncherToAmp(NoteHandler noteHandler) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(noteHandler);
     this.noteHandler = noteHandler;
@@ -25,7 +24,7 @@ public class MoveToAmp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    noteHandler.moveToAngle(16.1516);
+    noteHandler.moveToAngle(8.1516);
   }
 
   // Called once the command ends or is interrupted.

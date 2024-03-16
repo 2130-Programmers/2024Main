@@ -5,49 +5,62 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class NoteHandler extends SubsystemBase {
+  //Set up inputs for safety prox and note detection switch
   private static final DigitalInput
   bottomDetectionProx = new DigitalInput(0),
   noteLimitSwitch = new DigitalInput(1);
 
+  //Define rotation and launch motors
   private static final TalonFX
   launcherTop = new TalonFX(33),
   launcherBottom = new TalonFX(32),
   rotateLeft = new TalonFX(30),
   rotateRight = new TalonFX(31);
 
+  //Define intake motors
   private static final CANSparkMax
   intakeTop = new CANSparkMax(35, MotorType.kBrushless),
   intakeBottom = new CANSparkMax(34, MotorType.kBrushless);
 
   /** Creates a new NoteHandler. */
   public NoteHandler() {
+    //Set the inversion for each motor so they work together
     rotateRight.setInverted(true);
     rotateLeft.setInverted(false);
-    rotateLeft.setNeutralMode(NeutralModeValue.Brake);
-    rotateRight.setNeutralMode(NeutralModeValue.Brake);
     launcherTop.setInverted(false);
     launcherBottom.setInverted(true);
     intakeTop.setInverted(false);
     intakeBottom.setInverted(false);
 
-    rotateLeft.setPosition(0);
-    rotateRight.setPosition(0);
+    //Set intake and angle motors to brake and launcher to coast
+    rotateLeft.setNeutralMode(NeutralModeValue.Brake);
+    rotateRight.setNeutralMode(NeutralModeValue.Brake);
+    intakeTop.setIdleMode(IdleMode.kBrake);
+    intakeBottom.setIdleMode(IdleMode.kBrake);
+    launcherTop.setNeutralMode(NeutralModeValue.Coast);
+    launcherBottom.setNeutralMode(NeutralModeValue.Coast);
+
+    //Zero the launcher when code starts
+    rotateLeft.setPosition(-8);
+    rotateRight.setPosition(-8);
   }
 
   /**
-   * Move the launcher to specified angle: higher values move the intake higher, and thus the launcher points lower. 0 is the resting position and used for picking up nots off the ground
+   * Move the launcher to specified angle: higher values move the intake higher, and thus the launcher points lower. 0 is horizontal, -8 is the ground
    * @param angle - the angle to move the launcher to, expressed in encoder ticks
    * @return true when the launcher has reached its target
    */
@@ -58,13 +71,27 @@ public class NoteHandler extends SubsystemBase {
 
     double angleError = angle - (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2;
 
-    if (angle < 12){
-      setRotatePower(.3);
-    } else {
-      setRotatePower(.15);
-    }
+    // rotateLeft.
 
     return angleError < .1;
+  }
+
+  /**
+   * Check if the launcher is at or above the specified speed
+   * @param rpm - the minimum speed
+   * @return true if the launcher is at or above the minimum speed
+   */
+  public boolean launcherAtSpeed(double rpm) {
+    return (launcherBottom.getRotorVelocity().getValueAsDouble() * 60 >= rpm) && (launcherTop.getRotorVelocity().getValueAsDouble() * 60 >= rpm);
+  }
+
+  /**
+   * Set the speed of the launcher in RPM
+   * @param rpm - the value to set to both launch wheels
+   */
+  public void setLaunchRpm(double rpm) {
+    launcherBottom.setControl(new VelocityVoltage(rpm/60));
+    launcherTop.setControl(new VelocityVoltage(rpm/60));
   }
 
   /**
@@ -108,20 +135,6 @@ public class NoteHandler extends SubsystemBase {
   boolean readyLauncher(int targetSpeed) {
     // launcherTop.setControl()
     return false;
-  }
-
-  /**
-   * Run intake until note reaches photoeye
-   * @return true when the note is in position
-   */
-  public boolean intakeNote() {
-    if(!noteLimitSwitch.get()) {
-      setIntakePower(.2);
-    }else{
-      setIntakePower(0);
-    }
-
-    return noteLimitSwitch.get();
   }
 
   /**

@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NoteHandler;
 
 public class ZeroHandler extends Command {
   private NoteHandler noteHandler;
-  private boolean done;
+  private boolean done = false;
   /** Creates a new ZeroLauncher. */
   public ZeroHandler(NoteHandler noteHandler) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -24,7 +24,7 @@ public class ZeroHandler extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    done = noteHandler.moveToAngle(2);
+    done = noteHandler.moveToAngle(-6.5);
   }
 
   // Called once the command ends or is interrupted.

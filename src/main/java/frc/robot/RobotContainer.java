@@ -5,9 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.vision.*;
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+import frc.robot.commands.drive.*;
+import frc.robot.commands.launcher.*;
+import frc.robot.commands.vision.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -20,25 +21,26 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class RobotContainer {
   // --- SUBSYSTEMS --- \\\
   public static final NoteHandler noteHandler = new NoteHandler();
+  public static final Gyro gyro = new Gyro(); 
   public static final DriveTrain driveTrain = new DriveTrain();
   public static final PiVision piVision = new PiVision();
   public static final LimelightVision limelightVision = new LimelightVision();
-  public static final Gyro gyro = new Gyro();
+
 
   // --- COMMANDS --- \\\
   //Drivetrain
   private static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
   private static final AltDrive altDrive = new AltDrive(driveTrain);
+  //Launcher
   private static final IntakeNote intakeNote = new IntakeNote(noteHandler);
+  private static final ZeroHandler zeroHandler = new ZeroHandler(noteHandler);
+  private static final StopHandlerMotors stopNoteHandlerMotors = new StopHandlerMotors(noteHandler);
+  private static final LauncherToAmp moveToAmp = new LauncherToAmp(noteHandler);
+  private static final LaunchNote launchNote = new LaunchNote(noteHandler);
+  //Vision
   private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(noteHandler, piVision);
   private static final LaunchPowerFromAprilTag launchPowerFromAprilTag = new LaunchPowerFromAprilTag(noteHandler, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
-  private static final ZeroHandler zeroHandler = new ZeroHandler(noteHandler);
-  private static final LaunchNote launchNote = new LaunchNote(noteHandler);
-  private static final SpinLauncher spinLauncher = new SpinLauncher(noteHandler);
-  private static final StopNoteHandlerMotors stopNoteHandlerMotors = new StopNoteHandlerMotors(noteHandler);
-  private static final MoveToAngle moveToAngle = new MoveToAngle(noteHandler);
-  private static final MoveToAmp moveToAmp = new MoveToAmp(noteHandler);
 
 
   // Replace with CommandXboxController or CommandJoystick if needed
@@ -51,10 +53,9 @@ public class RobotContainer {
     driverGamepad.rightBumper().whileTrue(altDrive);
     operatorGamepad.a().onTrue(intakeNote);
     operatorGamepad.b().onTrue(zeroHandler);
-    operatorGamepad.x().whileTrue(angleFromAprilTag);
+    driverGamepad.x().whileTrue(angleFromAprilTag);
+    operatorGamepad.y().whileTrue(new SpinLauncher(noteHandler, 5000));
     operatorGamepad.leftTrigger().onTrue(launchNote);
-    operatorGamepad.y().whileTrue(spinLauncher);
-    operatorGamepad.rightBumper().whileTrue(moveToAngle);
     operatorGamepad.leftBumper().onTrue(stopNoteHandlerMotors);
     operatorGamepad.povDown().whileTrue(moveToAmp);
 

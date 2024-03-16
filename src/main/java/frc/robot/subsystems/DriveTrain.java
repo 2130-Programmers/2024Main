@@ -8,6 +8,14 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.proto.Kinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,6 +41,15 @@ public class DriveTrain extends SubsystemBase {
 
   private static SwerveModule flModule, frModule, blModule, brModule;
 
+  private final Translation2d[] modulePositions = {
+    new Translation2d(-0.381, 0.381),
+    new Translation2d(0.381, 0.381),
+    new Translation2d(0.381, -0.381),
+    new Translation2d(-0.381, -0.381)
+  };
+
+  private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(modulePositions[0], modulePositions[1], modulePositions[2], modulePositions[3]);
+  public final SwerveDrivePoseEstimator driveOdometry;
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
@@ -50,6 +67,18 @@ public class DriveTrain extends SubsystemBase {
     frModule = new SwerveModule(frRotationMotor, frDriveMotor, frEncoder, 1);
     blModule = new SwerveModule(blRotationMotor, blDriveMotor, blEncoder, 2);
     brModule = new SwerveModule(brRotationMotor, brDriveMotor, brEncoder, 3);
+
+    driveOdometry = new SwerveDrivePoseEstimator(
+      swerveDriveKinematics, 
+      RobotContainer.gyro.gyroRotation(), 
+      new SwerveModulePosition[] {
+        flModule.getModulePosition(),
+        frModule.getModulePosition(),
+        blModule.getModulePosition(),
+        brModule.getModulePosition()
+      },
+      new Pose2d()
+    );
   }
 
   //Assuming robot is square
@@ -159,9 +188,16 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("fL Encoder", flEncoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("fr Encoder", frEncoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("bl Encoder", blEncoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("br Encoder", brEncoder.getAbsolutePosition().getValueAsDouble());
+
+    //Update the drivetrain odemetry with current values
+    driveOdometry.update(RobotContainer.gyro.gyroRotation(), new SwerveModulePosition[] {
+      flModule.getModulePosition(),
+      frModule.getModulePosition(),
+      blModule.getModulePosition(),
+      brModule.getModulePosition()
+    });
+
+    SmartDashboard.putNumber("Drive odemetry X", driveOdometry.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("Drive odemetry Y", driveOdometry.getEstimatedPosition().getY());
   }
 }

@@ -8,13 +8,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.TeleDriveCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimelightVision;
 
 public class PointAtNote extends Command {
-  DriveTrain driveTrain;
-  LimelightVision limelightVision;
+  private DriveTrain driveTrain;
+  private LimelightVision limelightVision;
   private double angleError;
   /** Creates a new PointAtNote. */
   public PointAtNote(DriveTrain driveTrain, LimelightVision limelightVision) {

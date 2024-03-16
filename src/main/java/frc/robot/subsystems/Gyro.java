@@ -1,6 +1,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,6 +27,11 @@ public class Gyro extends SubsystemBase {
   /**Returns current angle reading from set axis*/
   public double gyroYaw() {
     return gyroSensor.getAngle();
+  }
+
+  /**Returns current angle reading from set axis*/
+  public Rotation2d gyroRotation() {
+    return gyroSensor.getRotation2d();
   }  
 
   @Override

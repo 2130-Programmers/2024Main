@@ -5,13 +5,19 @@
 package frc.robot.subsystems;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.RobotCentric;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -20,13 +26,14 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class PiVision extends SubsystemBase {
   final PhotonCamera photonPI = new PhotonCamera("Photon rPI");
   final PhotonPoseEstimator poseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
   PhotonPipelineResult pipelineResult;
-  Pose3d robotPose;
+  Pose3d robotPose = new Pose3d();
 
   /** Creates a new Vision. */
   public PiVision() {
@@ -41,19 +48,28 @@ public class PiVision extends SubsystemBase {
 
   /**
    * Update the results from vision processing on RIO
+   * Should be called locally by methods that require it
    */
-  public void updatePipelineResult() {
+  private void updatePipelineResult() {
     pipelineResult = photonPI.getLatestResult();
   }
 
   /**
-   * Use the data gathered from apriltags to estimate the robot's pose relative to the BLUE ALLIANCE wall
+   * Estimate the robots field relative pose
+   * @return - pose relative to the blue alliance wall, or null if no targets are tracked
    */
   public Pose3d estimatePose() {
     updatePipelineResult();
+    Optional<EstimatedRobotPose> optionalPose = poseEstimator.update();
     if(pipelineResult.hasTargets()) {
-      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(pipelineResult.getBestTarget().getBestCameraToTarget(), aprilTagFieldLayout.getTagPose(pipelineResult.getBestTarget().getFiducialId()).get(), Constants.VisionConstants.CAMERA_RELATIVE_TO_ROBOT);
+      try {
+        robotPose = optionalPose.get().estimatedPose;
+        RobotContainer.driveTrain.driveOdometry.addVisionMeasurement(optionalPose.get().estimatedPose.toPose2d(), optionalPose.get().timestampSeconds);
+      } catch(NoSuchElementException noSuchElementException) {
+        System.out.println("Could not update robot pose, no tracked targets");
+      }
     }
+
     return robotPose;
   }
 
@@ -63,19 +79,26 @@ public class PiVision extends SubsystemBase {
    * @return the distance in meters from camera to speaker, or 0 if not tracking speaker
    */
   public double getDistanceToTarget() {
+    updatePipelineResult();
+    if(!pipelineResult.hasTargets()) {
+      return 0;
+    }
+    
     //True if tracking center target on either speaker
-    boolean trackingSpeakerCenter = false;
-    for(PhotonTrackedTarget currentTarget : pipelineResult.getTargets()) {
-      //Update to match center targets on speaker
-      if(currentTarget.getFiducialId() == 4 || currentTarget.getFiducialId() == 6) {
-        trackingSpeakerCenter = true;
+    List<PhotonTrackedTarget> currentTargets = pipelineResult.getTargets();
+    //Will remain null unless the camera is currently tracking the center target on one of the speakers
+    PhotonTrackedTarget speakerCenterTarget = null;
+    for(PhotonTrackedTarget current : currentTargets) {
+      //If tracking the center target, update center target variable
+      if(current.getFiducialId() == 4 || current.getFiducialId() == 7) {
+        speakerCenterTarget = current;
       }
     }
 
 
-    if(pipelineResult.hasTargets() && trackingSpeakerCenter) {
+    if(speakerCenterTarget != null) {
       //Get the position of the target relative to the robot
-      Transform3d targetPosition = pipelineResult.getBestTarget().getBestCameraToTarget();
+      Transform3d targetPosition = speakerCenterTarget.getBestCameraToTarget();
       
       //Pythagorean theorum to get total distance to target
       return Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
@@ -86,7 +109,7 @@ public class PiVision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    updatePipelineResult();
-    SmartDashboard.putNumber("Reported distance to apriltag in meters: ", getDistanceToTarget());
+    Optional<EstimatedRobotPose> currentEstimatedRobotPose = poseEstimator.update();
+    RobotContainer.driveTrain.driveOdometry.addVisionMeasurement(currentEstimatedRobotPose.get().estimatedPose.toPose2d(), currentEstimatedRobotPose.get().timestampSeconds);
   }
 }

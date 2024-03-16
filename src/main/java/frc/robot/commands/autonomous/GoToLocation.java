@@ -4,23 +4,22 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.PiVision;
 
 public class GoToLocation extends Command {
-  PiVision vision;
-  DriveTrain driveTrain;
-  Pose3d targetPose;
+  private boolean done = false;
+  private DriveTrain driveTrain;
+  private Pose2d targetPose;
 
   /** Creates a new GoToLocation. */
-  public GoToLocation(PiVision vision, DriveTrain driveTrain, Pose3d targetPose) {
+  public GoToLocation(DriveTrain driveTrain, Pose2d targetPose) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(vision, driveTrain);
-    this.vision = vision;
+    addRequirements(driveTrain);
     this.driveTrain = driveTrain;
     this.targetPose = targetPose;
   }
@@ -32,11 +31,11 @@ public class GoToLocation extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose3d currentPose = vision.estimatePose();
+    Pose2d currentPose = driveTrain.driveOdometry.getEstimatedPosition();
     double
     xErr = currentPose.getX() - targetPose.getX(),
     yErr = currentPose.getY() - targetPose.getY(),
-    rErr = currentPose.getRotation().getAngle() - targetPose.getRotation().getAngle();
+    rErr = currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians();
 
     SmartDashboard.putNumber("Position x error", xErr);
     SmartDashboard.putNumber("Position y error", yErr);
@@ -47,15 +46,19 @@ public class GoToLocation extends Command {
       yErr * Constants.DriveTrainConstants.AUTO_TRANSLATION_GAIN,
       rErr * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN
     );
+
+    done = (xErr < 1 && yErr < 1 && rErr < 1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    driveTrain.calculateKinematics(0, 0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }
