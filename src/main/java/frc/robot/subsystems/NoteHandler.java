@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class NoteHandler extends SubsystemBase {
   private static final DigitalInput
@@ -50,15 +51,19 @@ public class NoteHandler extends SubsystemBase {
    * @param angle - the angle to move the launcher to, expressed in encoder ticks
    * @return true when the launcher has reached its target
    */
-  public boolean moveToAngle(double angle) {
+  public void moveToAngle(double angle) {
     if(angle > Constants.LauncherConstants.LAUNCHER_MAX_ANGLE) {
       throw new Error("Target launcher angle out of bounds");
     }
 
     double angleError = angle - (rotateLeft.getPosition().getValueAsDouble() + rotateRight.getPosition().getValueAsDouble())/2;
 
-    setRotatePower(angleError * Constants.LauncherConstants.ANGLE_POWER);
-    return false;
+    if (angle < 12){
+      setRotatePower(.3);
+    } else {
+      setRotatePower(.15);
+    }
+
   }
 
   /**
@@ -110,7 +115,7 @@ public class NoteHandler extends SubsystemBase {
    */
   public boolean intakeNote() {
     if(!noteLimitSwitch.get()) {
-      setIntakePower(.4);
+      setIntakePower(.2);
     }else{
       setIntakePower(0);
     }

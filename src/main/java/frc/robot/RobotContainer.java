@@ -37,6 +37,9 @@ public class RobotContainer {
   private static final LaunchNote launchNote = new LaunchNote(noteHandler);
   private static final SpinLauncher spinLauncher = new SpinLauncher(noteHandler);
   private static final StopNoteHandlerMotors stopNoteHandlerMotors = new StopNoteHandlerMotors(noteHandler);
+  private static final MoveToAngle moveToAngle = new MoveToAngle(noteHandler);
+  private static final MoveToAmp moveToAmp = new MoveToAmp(noteHandler);
+
 
   // Replace with CommandXboxController or CommandJoystick if needed
     public static final CommandXboxController
@@ -51,6 +54,10 @@ public class RobotContainer {
     operatorGamepad.x().whileTrue(angleFromAprilTag);
     operatorGamepad.leftTrigger().onTrue(launchNote);
     operatorGamepad.y().whileTrue(spinLauncher);
+    operatorGamepad.rightBumper().whileTrue(moveToAngle);
+    operatorGamepad.leftBumper().onTrue(stopNoteHandlerMotors);
+    operatorGamepad.povDown().whileTrue(moveToAmp);
+
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */

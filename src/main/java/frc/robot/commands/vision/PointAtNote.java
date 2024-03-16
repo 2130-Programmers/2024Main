@@ -32,7 +32,7 @@ public class PointAtNote extends Command {
   @Override
   public void execute() {
     angleError = limelightVision.angleToNearestNote();
-    driveTrain.calculateKinematics( RobotContainer.driverGamepad.getLeftX() * -1,  RobotContainer.driverGamepad.getLeftY(), angleError * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN * (1 - limelightVision.getTargetArea()));
+    driveTrain.calculateKinematics(RobotContainer.driverGamepad.getLeftX() * -1,  RobotContainer.driverGamepad.getLeftY(), angleError * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN * (1 - limelightVision.getTargetArea()));
     SmartDashboard.putNumber("Angle Error is  ", + angleError);
   }
 
