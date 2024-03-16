@@ -51,7 +51,7 @@ public class NoteHandler extends SubsystemBase {
    * @param angle - the angle to move the launcher to, expressed in encoder ticks
    * @return true when the launcher has reached its target
    */
-  public void moveToAngle(double angle) {
+  public boolean moveToAngle(double angle) {
     if(angle > Constants.LauncherConstants.LAUNCHER_MAX_ANGLE) {
       throw new Error("Target launcher angle out of bounds");
     }
@@ -64,6 +64,7 @@ public class NoteHandler extends SubsystemBase {
       setRotatePower(.15);
     }
 
+    return angleError < .1;
   }
 
   /**
@@ -74,7 +75,7 @@ public class NoteHandler extends SubsystemBase {
     //Move to point in a line directly at the speaker(6ft off the ground)
     //Then add a small amount of extra angle that scales with distance from the target
     double targetAngle = Constants.LauncherConstants.RADIANS_TO_ENCODER * (Math.atan2(2, distanceToTarget));
-    if(targetAngle < 15) {
+    if(targetAngle < Constants.LauncherConstants.LAUNCHER_MAX_ANGLE) {
       moveToAngle(targetAngle);
     }else{
       moveToAngle(0);

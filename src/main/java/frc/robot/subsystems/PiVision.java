@@ -11,6 +11,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -59,10 +60,20 @@ public class PiVision extends SubsystemBase {
   /**
    * Get the total distance from camera to target
    * @param target - PhotonTrackedTarget coming from
-   * @return the distance in meters from camera to target
+   * @return the distance in meters from camera to speaker, or 0 if not tracking speaker
    */
   public double getDistanceToTarget() {
-    if(pipelineResult.hasTargets() && (pipelineResult.getBestTarget().getFiducialId() == 4 || pipelineResult.getBestTarget().getFiducialId() == 3)) {
+    //True if tracking center target on either speaker
+    boolean trackingSpeakerCenter = false;
+    for(PhotonTrackedTarget currentTarget : pipelineResult.getTargets()) {
+      //Update to match center targets on speaker
+      if(currentTarget.getFiducialId() == 4 || currentTarget.getFiducialId() == 6) {
+        trackingSpeakerCenter = true;
+      }
+    }
+
+
+    if(pipelineResult.hasTargets() && trackingSpeakerCenter) {
       //Get the position of the target relative to the robot
       Transform3d targetPosition = pipelineResult.getBestTarget().getBestCameraToTarget();
       
