@@ -41,7 +41,7 @@ public class SwerveModule {
      */
     public void applyMotorPowers() {
         driveMotor.set(drivePowers[moduleID]);
-        rotationMotor.set(steerPowers[moduleID]);
+        rotationMotor.setVoltage(12 * steerPowers[moduleID]);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SwerveModule {
     public static void scaleSteerPowers() {
         //Find greatest magnitude
         for (int i = 0; i < steerPowers.length; i++) {
-            if (Math.abs(steerPowers[i]) > Constants.DriveTrainConstants.PEAK_TURN_POWER) steerPowers[i] = (Constants.DriveTrainConstants.PEAK_TURN_POWER) * (Math.abs(steerPowers[i])/steerPowers[i]);
+            if (Math.abs(steerPowers[i]) > Constants.DriveTrainConstants.PEAK_TURN_POWER) steerPowers[i] = (Constants.DriveTrainConstants.PEAK_TURN_POWER) * Math.signum(steerPowers[i]);
         }
     }
 

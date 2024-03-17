@@ -26,7 +26,7 @@ public class AltDrive extends Command {
   public void execute() {
     driveTrain.altDrive(
       RobotContainer.driverGamepad.getLeftX(),
-      RobotContainer.driverGamepad.getLeftY(),
+      -RobotContainer.driverGamepad.getLeftY(),
       RobotContainer.driverGamepad.getRightX()
     );
   }

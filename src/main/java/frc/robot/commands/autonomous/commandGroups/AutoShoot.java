@@ -7,7 +7,6 @@ package frc.robot.commands.autonomous.commandGroups;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.commands.launcher.LaunchNote;
-import frc.robot.commands.launcher.SpinLauncher;
 import frc.robot.commands.launcher.StopHandlerMotors;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,9 +19,9 @@ public class AutoShoot extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveAndIntakeNote(),
-      new SpinLauncher(RobotContainer.noteHandler, 5000),
-      new LaunchNote(RobotContainer.noteHandler),
-      new StopHandlerMotors(RobotContainer.noteHandler)
+      // new SpinLauncher(RobotContainer.noteHandler, 5000),
+      new LaunchNote(RobotContainer.launcherIntake, RobotContainer.launcherWheels),
+      new StopHandlerMotors(RobotContainer.launcherAngle, RobotContainer.launcherWheels, RobotContainer.launcherIntake)
     );
   }
 }

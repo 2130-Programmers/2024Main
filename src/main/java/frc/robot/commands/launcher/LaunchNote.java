@@ -5,35 +5,45 @@
 package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
+import frc.robot.subsystems.notehandler.LauncherIntake;
+import frc.robot.subsystems.notehandler.LauncherWheels;
 
 public class LaunchNote extends Command {
-  private NoteHandler noteHandler;
-  private boolean done = false;
+  private final LauncherIntake launcherIntake;
+  private final LauncherWheels launcherWheels;
+  private boolean done = false, firstNoteTriggered = false;
   /** Creates a new LaunchNote. */
-  public LaunchNote(NoteHandler noteHandler) {
+  public LaunchNote(LauncherIntake launcherIntake, LauncherWheels launcherWheels) {
     // Use addRequirements() here to declare subsystem dependencies
-    addRequirements(noteHandler);
-    this.noteHandler = noteHandler;
+    addRequirements(launcherIntake, launcherWheels);
+    this.launcherIntake = launcherIntake;
+    this.launcherWheels = launcherWheels;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    noteHandler.setIntakePower(.5);
+    launcherIntake.setIntakePower(1);
+    done = false;
+    firstNoteTriggered = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    done = !noteHandler.notePresent();
+    boolean note = launcherIntake.notePresent();
+    if(!note && !firstNoteTriggered) {
+      firstNoteTriggered = true;
+    } else if (note && firstNoteTriggered) {
+      done = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    noteHandler.setIntakePower(0);
-    noteHandler.setLaunchPower(0);
+    launcherIntake.setIntakePower(0);
+    launcherWheels.setLaunchPower(0);
   }
 
   // Returns true when the command should end.

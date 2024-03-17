@@ -27,12 +27,12 @@ public final class Constants {
     public static final double
     BOT_LENGTH = .762,
     BOT_WIDTH = .762,
-    SWERVE_DEADZONE = Math.PI/24,
+    SWERVE_DEADZONE = Math.PI/48,
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
-    TURN_P_GAIN = 1,
+    TURN_P_GAIN = .8,
     AUTO_TRANSLATION_GAIN = .1,
-    AUTO_ROTATION_GAIN = .35;
+    AUTO_ROTATION_GAIN = .1;
     
   }
 
@@ -49,7 +49,7 @@ public final class Constants {
     ANGLE_POWER = .35,
     ANGLE_DEADZONE = .1,
     INTAKE_POWER = 1,
-    LAUNCHER_MAX_ANGLE = 18;
+    LAUNCHER_MAX_ANGLE = 10;
     
   }
 }

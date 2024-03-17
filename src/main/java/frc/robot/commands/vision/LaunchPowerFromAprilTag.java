@@ -5,17 +5,17 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
 import frc.robot.subsystems.PiVision;
+import frc.robot.subsystems.notehandler.LauncherWheels;
 
 public class LaunchPowerFromAprilTag extends Command {
-  private final NoteHandler noteHandler;
+  private final LauncherWheels launcherWheels;
   private final PiVision vision;
   /** Creates a new LaunchPowerFromAprilTag. */
-  public LaunchPowerFromAprilTag(NoteHandler noteHandler, PiVision vision) {
+  public LaunchPowerFromAprilTag(LauncherWheels launcherWheels, PiVision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(noteHandler, vision);
-    this.noteHandler = noteHandler;
+    addRequirements(launcherWheels, vision);
+    this.launcherWheels = launcherWheels;
     this.vision = vision;
   }
 
@@ -26,7 +26,7 @@ public class LaunchPowerFromAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    noteHandler.setLaunchPower(vision.getDistanceToTarget() * .08 + .2);
+    launcherWheels.setLaunchPower(vision.getDistanceToTarget() * .08 + .2);
   }
 
   // Called once the command ends or is interrupted.

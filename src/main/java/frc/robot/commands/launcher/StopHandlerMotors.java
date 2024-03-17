@@ -5,24 +5,30 @@
 package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.NoteHandler;
+import frc.robot.subsystems.notehandler.LauncherAngle;
+import frc.robot.subsystems.notehandler.LauncherIntake;
+import frc.robot.subsystems.notehandler.LauncherWheels;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class StopHandlerMotors extends InstantCommand {
-  NoteHandler noteHandler;
-  public StopHandlerMotors(NoteHandler noteHandler) {
+  LauncherAngle noteHandler;
+  LauncherWheels launcherWheels;
+  LauncherIntake launcherIntake;
+  public StopHandlerMotors(LauncherAngle noteHandler, LauncherWheels launcherWheels, LauncherIntake launcherIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(noteHandler);
     this.noteHandler = noteHandler;
+    this.launcherWheels = launcherWheels;
+    this.launcherIntake = launcherIntake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     noteHandler.setRotatePower(0);
-    noteHandler.setIntakePower(0);
-    noteHandler.setLaunchPower(0);
+    launcherIntake.setIntakePower(0);
+    launcherWheels.setLaunchPower(0);
   }
 }

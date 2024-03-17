@@ -5,35 +5,35 @@
 package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
+import frc.robot.subsystems.notehandler.LauncherIntake;
 
 public class IntakeNote extends Command {
-  private NoteHandler noteHandler;
+  private LauncherIntake launcherIntake;
   private boolean done = false;
 
   /** Creates a new IntakeNote. */
-  public IntakeNote(NoteHandler tempSub) {
+  public IntakeNote(LauncherIntake tempSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(tempSub);
-    noteHandler = tempSub;
+    launcherIntake = tempSub;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    noteHandler.setIntakePower(.25);
+    launcherIntake.setIntakePower(.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    done = noteHandler.notePresent();
+    done = launcherIntake.notePresent();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    noteHandler.setIntakePower(0);
+    launcherIntake.setIntakePower(0);
   }
 
   // Returns true when the command should end.

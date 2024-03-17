@@ -5,16 +5,16 @@
 package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
+import frc.robot.subsystems.notehandler.LauncherAngle;
 
 
 public class LauncherToAmp extends Command {
   /** Creates a new MoveToAmp. */
-  private NoteHandler noteHandler;
-  public LauncherToAmp(NoteHandler noteHandler) {
+  private LauncherAngle launcherAngle;
+  public LauncherToAmp(LauncherAngle noteHandler) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(noteHandler);
-    this.noteHandler = noteHandler;
+    this.launcherAngle = noteHandler;
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +24,7 @@ public class LauncherToAmp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    noteHandler.moveToAngle(8.1516);
+    launcherAngle.moveToAngle(6.75);
   }
 
   // Called once the command ends or is interrupted.

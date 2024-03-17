@@ -29,11 +29,11 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class PiVision extends SubsystemBase {
-  final PhotonCamera photonPI = new PhotonCamera("Photon rPI");
-  final PhotonPoseEstimator poseEstimator;
-  AprilTagFieldLayout aprilTagFieldLayout;
-  PhotonPipelineResult pipelineResult;
-  Pose3d robotPose = new Pose3d();
+  private final PhotonCamera photonPI = new PhotonCamera("Photon rPI");
+  private final PhotonPoseEstimator poseEstimator;
+  private AprilTagFieldLayout aprilTagFieldLayout;
+  private PhotonPipelineResult pipelineResult;
+  private Pose3d robotPose = new Pose3d();
 
   /** Creates a new Vision. */
   public PiVision() {
@@ -43,7 +43,7 @@ public class PiVision extends SubsystemBase {
       System.out.println("Error loading apriltag field layout");
     }
 
-    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.CAMERA_RELATIVE_TO_ROBOT);
+    poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonPI, Constants.VisionConstants.CAMERA_RELATIVE_TO_ROBOT);
   }
 
   /**
@@ -60,15 +60,19 @@ public class PiVision extends SubsystemBase {
    */
   public Pose3d estimatePose() {
     updatePipelineResult();
+    poseEstimator.setLastPose(robotPose);
     Optional<EstimatedRobotPose> optionalPose = poseEstimator.update();
     if(pipelineResult.hasTargets()) {
-      try {
-        robotPose = optionalPose.get().estimatedPose;
+      try {    
+        robotPose = optionalPose.orElseThrow().estimatedPose;
         RobotContainer.driveTrain.driveOdometry.addVisionMeasurement(optionalPose.get().estimatedPose.toPose2d(), optionalPose.get().timestampSeconds);
-      } catch(NoSuchElementException noSuchElementException) {
-        System.out.println("Could not update robot pose, no tracked targets");
+      } catch (NoSuchElementException noSuchElementException) {
+        System.out.println("No pose estmiate avaliable");
       }
     }
+
+    SmartDashboard.putNumber("Vision X", robotPose.getX());
+    SmartDashboard.putNumber("Vision Y", robotPose.getY());
 
     return robotPose;
   }
@@ -109,7 +113,6 @@ public class PiVision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Optional<EstimatedRobotPose> currentEstimatedRobotPose = poseEstimator.update();
-    RobotContainer.driveTrain.driveOdometry.addVisionMeasurement(currentEstimatedRobotPose.get().estimatedPose.toPose2d(), currentEstimatedRobotPose.get().timestampSeconds);
+    estimatePose();
   }
 }

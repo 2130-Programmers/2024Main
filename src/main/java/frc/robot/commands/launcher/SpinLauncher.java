@@ -4,39 +4,23 @@
 
 package frc.robot.commands.launcher;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.notehandler.LauncherWheels;
 
-public class SpinLauncher extends Command {
-  private NoteHandler noteHandler;
-  private boolean done = false;
-  private double rpm;
-  /** Creates a new SpinLauncher. */
-  public SpinLauncher(NoteHandler noteHandler, double rpm) {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class SpinLauncher extends InstantCommand {
+  private final LauncherWheels noteLauncher;
+  public SpinLauncher(LauncherWheels noteLauncher) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(noteHandler);
-    this.noteHandler = noteHandler;
+    addRequirements(noteLauncher);
+    this.noteLauncher = noteLauncher;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    noteHandler.setLaunchRpm(rpm);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    done = noteHandler.launcherAtSpeed(rpm);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return done;
+    noteLauncher.setLaunchPower(1);
   }
 }

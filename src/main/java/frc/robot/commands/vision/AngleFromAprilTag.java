@@ -5,14 +5,14 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.NoteHandler;
 import frc.robot.subsystems.PiVision;
+import frc.robot.subsystems.notehandler.LauncherAngle;
 
 public class AngleFromAprilTag extends Command {
-  private final NoteHandler noteHandler;
+  private final LauncherAngle noteHandler;
   private final PiVision vision;
   /** Creates a new AprilTagLauncher. */
-  public AngleFromAprilTag(NoteHandler noteHandler, PiVision vision) {
+  public AngleFromAprilTag(LauncherAngle noteHandler, PiVision vision) {
     addRequirements(noteHandler, vision);
     this.noteHandler = noteHandler;
     this.vision = vision;
@@ -30,7 +30,9 @@ public class AngleFromAprilTag extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    noteHandler.setRotatePower(0);
+  }
 
   // Returns true when the command should end.
   @Override

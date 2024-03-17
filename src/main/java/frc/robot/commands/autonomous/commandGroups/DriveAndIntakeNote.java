@@ -18,7 +18,7 @@ public class DriveAndIntakeNote extends ParallelDeadlineGroup {
   public DriveAndIntakeNote() {
     // Add the deadline command in the super() call. Add other commands using
     // addCommands().
-    super(new IntakeNote(RobotContainer.noteHandler));
+    super(new IntakeNote(RobotContainer.launcherIntake));
     
     addCommands(
       new PointAtNote(RobotContainer.driveTrain, RobotContainer.limelightVision),
