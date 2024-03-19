@@ -34,8 +34,9 @@ public class RobotContainer {
 
   // --- COMMANDS --- \\\
   //Drivetrain
-  private static final TeleDriveCommand teleDriveCommand = new TeleDriveCommand(driveTrain);
+  private static final TeleDrive teleDriveCommand = new TeleDrive(driveTrain);
   private static final AltDrive altDrive = new AltDrive(driveTrain);
+  private static final DriveStraight driveStraight = new DriveStraight(driveTrain);
   //Launcher
   private static final IntakeNote intakeNote = new IntakeNote(launcherIntake);
   private static final ZeroHandler zeroHandler = new ZeroHandler(launcherAngle);
@@ -59,6 +60,7 @@ public class RobotContainer {
     //Driver
     driverGamepad.leftBumper().whileTrue(pointAtNote);
     driverGamepad.rightBumper().whileTrue(altDrive);
+    driverGamepad.a().whileTrue(driveStraight);
     // driverGamepad.y().whileTrue(point at speaker);
 
 
@@ -80,7 +82,7 @@ public class RobotContainer {
 
     //Set default commands(will run when no other command is using subystem)
     driveTrain.setDefaultCommand(teleDriveCommand);
-    launcherAngle.setDefaultCommand(manualLauncher);
+    // launcherAngle.setDefaultCommand(manualLauncher);
   }
 
   /**

@@ -34,7 +34,6 @@ public class LauncherAngle extends PIDSubsystem {
   /**
    * Move the launcher to specified angle: higher values move the intake higher, and thus the launcher points lower. 0 is horizontal, -8 is the ground
    * @param angle - the angle to move the launcher to, expressed in encoder ticks
-   * @return true when the launcher has reached its target
    */
   public void moveArmFeedForward(double position, double velocity) {
     //We need basically 1v to get the launcher to move slightly
@@ -50,7 +49,7 @@ public class LauncherAngle extends PIDSubsystem {
   public void angleFromDistance(double distanceToTarget) {
     //Move to point in a line directly at the speaker(6ft off the ground)
     //Then add a small amount of extra angle that scales with distance from the target
-    double targetAngle = (distanceToTarget * .7)-((Math.atan2(2, distanceToTarget)));
+    double targetAngle = distanceToTarget * .7 - Math.atan2(2, distanceToTarget);
 
     if(targetAngle < Constants.LauncherConstants.LAUNCHER_MAX_ANGLE) {
       setSetpoint(targetAngle);

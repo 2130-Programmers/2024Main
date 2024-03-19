@@ -49,7 +49,7 @@ public final class Constants {
     ANGLE_POWER = .35,
     ANGLE_DEADZONE = .1,
     INTAKE_POWER = 1,
-    LAUNCHER_MAX_ANGLE = 10;
+    LAUNCHER_MAX_ANGLE = 1;
     
   }
 }

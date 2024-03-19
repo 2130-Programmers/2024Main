@@ -4,6 +4,7 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PiVision;
 import frc.robot.subsystems.notehandler.LauncherAngle;
@@ -28,6 +29,7 @@ public class AngleFromAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Distance to Speaker", vision.getDistanceToTarget());
     noteHandler.angleFromDistance(vision.getDistanceToTarget());
   }
 

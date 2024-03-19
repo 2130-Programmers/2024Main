@@ -39,8 +39,6 @@ public class ManualLauncher extends Command {
   @Override
   public void end(boolean interrupted) {
     launcherAngle.stopAngleMotors();
-    launcherIntake.setIntakePower(0);
-    launcherWheels.setLaunchPower(0);
   }
 
   // Returns true when the command should end.

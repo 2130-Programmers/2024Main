@@ -10,19 +10,20 @@ import frc.robot.subsystems.notehandler.LauncherIntake;
 
 public class IntakeNote extends Command {
   private LauncherIntake launcherIntake;
-  private boolean done = false;
+  private boolean done;
 
   /** Creates a new IntakeNote. */
-  public IntakeNote(LauncherIntake tempSub) {
+  public IntakeNote(LauncherIntake launcherIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tempSub);
-    launcherIntake = tempSub;
+    addRequirements(launcherIntake);
+    this.launcherIntake = launcherIntake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     launcherIntake.setIntakePower(.25);
+    done = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -28,7 +28,6 @@ public class StopHandlerMotors extends InstantCommand {
   @Override
   public void initialize() {
     noteHandler.disable();
-    noteHandler.getController().reset();
     noteHandler.stopAngleMotors();
     launcherIntake.setIntakePower(0);
     launcherWheels.setLaunchPower(0);
