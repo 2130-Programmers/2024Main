@@ -4,12 +4,14 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimelightVision;
+import edu.wpi.first.networktables.NetworkTable;
 
 public class PointAtNote extends Command {
   private DriveTrain driveTrain;
@@ -31,7 +33,7 @@ public class PointAtNote extends Command {
   @Override
   public void execute() {
     angleError = limelightVision.angleToNearestNote();
-    driveTrain.calculateKinematics(RobotContainer.driverGamepad.getLeftX() * -1,  RobotContainer.driverGamepad.getLeftY(), angleError * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN * (1 - limelightVision.getTargetArea()));
+    driveTrain.calculateKinematics(RobotContainer.driverGamepad.getLeftX(),  RobotContainer.driverGamepad.getLeftY(), angleError * .0125 * (.6 - limelightVision.getTargetArea()));
     SmartDashboard.putNumber("Angle Error is  ", + angleError);
   }
 
@@ -42,6 +44,6 @@ public class PointAtNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(angleError) < 1.5;
+    return false;
   }
 }
