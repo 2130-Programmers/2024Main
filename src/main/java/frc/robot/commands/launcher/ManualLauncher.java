@@ -7,20 +7,14 @@ package frc.robot.commands.launcher;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.notehandler.LauncherAngle;
-import frc.robot.subsystems.notehandler.LauncherIntake;
-import frc.robot.subsystems.notehandler.LauncherWheels;
 
 public class ManualLauncher extends Command {
   private final LauncherAngle launcherAngle;
-  private final LauncherIntake launcherIntake;
-  private final LauncherWheels launcherWheels;
   /** Creates a new ManualLauncher. */
-  public ManualLauncher(LauncherAngle launcherAngle, LauncherIntake launcherIntake, LauncherWheels launcherWheels) {
+  public ManualLauncher(LauncherAngle launcherAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(launcherAngle, launcherIntake, launcherWheels);
+    addRequirements(launcherAngle);
     this.launcherAngle = launcherAngle;
-    this.launcherIntake = launcherIntake;
-    this.launcherWheels = launcherWheels;
   }
 
   // Called when the command is initially scheduled.
@@ -31,8 +25,6 @@ public class ManualLauncher extends Command {
   @Override
   public void execute() {
     launcherAngle.moveArmFeedForward(launcherAngle.getMeasurement(), RobotContainer.operatorGamepad.getLeftY());
-    launcherIntake.setIntakePower(RobotContainer.operatorGamepad.getLeftTriggerAxis());
-    launcherWheels.setLaunchPower(RobotContainer.operatorGamepad.getRightTriggerAxis());
   }
 
   // Called once the command ends or is interrupted.

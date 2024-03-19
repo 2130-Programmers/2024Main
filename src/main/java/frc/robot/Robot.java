@@ -36,6 +36,8 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     RobotContainer.pdh.setNoteLeds(RobotContainer.launcherIntake.notePresent());
+
+    SmartDashboard.putNumber("Launcher angle", -8);
   }
 
   /**

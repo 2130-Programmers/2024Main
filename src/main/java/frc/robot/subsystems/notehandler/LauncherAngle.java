@@ -6,6 +6,7 @@ package frc.robot.subsystems.notehandler;
 
 import com.ctre.phoenix6.controls.VoltageOut;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,11 +17,12 @@ public class LauncherAngle extends PIDSubsystem {
   /** Creates a new LauncherAngle. */
 
   //Feedforward controller to predict required power for arm angle
-  private ArmFeedforward armFeedforward = new ArmFeedforward(0, .88, 3);
+  private ArmFeedforward armFeedforward = new ArmFeedforward(0, .85, 3);
+  public boolean feedForwardEnabled = true;
   public LauncherAngle() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(1, 0, 0));
+        new PIDController(1.5, 0, .05));
   }
 
   /**
@@ -49,7 +51,7 @@ public class LauncherAngle extends PIDSubsystem {
   public void angleFromDistance(double distanceToTarget) {
     //Move to point in a line directly at the speaker(6ft off the ground)
     //Then add a small amount of extra angle that scales with distance from the target
-    double targetAngle = distanceToTarget * .7 - Math.atan2(2, distanceToTarget);
+    double targetAngle = (distanceToTarget * .125) -Math.atan2(2, distanceToTarget);
 
     if(targetAngle < Constants.LauncherConstants.LAUNCHER_MAX_ANGLE) {
       setSetpoint(targetAngle);
@@ -69,14 +71,19 @@ public class LauncherAngle extends PIDSubsystem {
 
   @Override
   public void useOutput(double output, double setpoint) {
+    MathUtil.clamp(output, -0.25, 0.5);
     // Use the output here
-    moveArmFeedForward(setpoint, output);
+    if(feedForwardEnabled) {
+      moveArmFeedForward(setpoint, output);
+    } else {
+      setRotateVoltage(0);
+    }
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    double encoderAngle = (LauncherComponents.rotateLeft.getPosition().getValueAsDouble() + LauncherComponents.rotateRight.getPosition().getValueAsDouble())/2 - .8;
+    double encoderAngle = (LauncherComponents.rotateLeft.getPosition().getValueAsDouble() + LauncherComponents.rotateRight.getPosition().getValueAsDouble())/2;
     return encoderAngle * Constants.LauncherConstants.ENCODER_TO_RADIANS;
   }
 }

@@ -10,34 +10,34 @@ import frc.robot.subsystems.PiVision;
 import frc.robot.subsystems.notehandler.LauncherAngle;
 
 public class AngleFromAprilTag extends Command {
-  private final LauncherAngle noteHandler;
+  private final LauncherAngle launcherAngle;
   private final PiVision vision;
   /** Creates a new AprilTagLauncher. */
   public AngleFromAprilTag(LauncherAngle noteHandler, PiVision vision) {
     addRequirements(noteHandler, vision);
-    this.noteHandler = noteHandler;
+    this.launcherAngle = noteHandler;
     this.vision = vision;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    noteHandler.getController().reset();
-    noteHandler.enable();
+    launcherAngle.getController().reset();
+    launcherAngle.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Distance to Speaker", vision.getDistanceToTarget());
-    noteHandler.angleFromDistance(vision.getDistanceToTarget());
+    // launcherAngle.angleFromDistance(vision.getDistanceToTarget());
+    launcherAngle.setSetpoint(SmartDashboard.getNumber("Launcher angle", 0));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    noteHandler.stopAngleMotors();
-    noteHandler.disable();
+    launcherAngle.disable();
+    launcherAngle.stopAngleMotors();
   }
 
   // Returns true when the command should end.

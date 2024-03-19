@@ -44,7 +44,7 @@ public class RobotContainer {
   private static final LaunchNote launchNote = new LaunchNote(launcherIntake, launcherWheels);
   private static final SpinLauncher spinLauncher = new SpinLauncher(launcherWheels);
   private static final LauncherToAmp launcherToAmp = new LauncherToAmp(launcherAngle);
-  private static final ManualLauncher manualLauncher=  new ManualLauncher(launcherAngle, launcherIntake, launcherWheels);
+  private static final ManualLauncher manualLauncher =  new ManualLauncher(launcherAngle);
   //Vision
   private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(launcherAngle, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
@@ -69,8 +69,8 @@ public class RobotContainer {
     operatorGamepad.leftBumper().onTrue(intakeNote);
     operatorGamepad.rightBumper().onTrue(launchNote);
     operatorGamepad.povUp().onTrue(spinLauncher);
-    operatorGamepad.a().whileTrue(zeroHandler);
-    operatorGamepad.b().onTrue(stopNoteHandlerMotors);
+    operatorGamepad.a().onTrue(zeroHandler);
+    operatorGamepad.b().whileTrue(stopNoteHandlerMotors);
     operatorGamepad.x().whileTrue(launcherToAmp);
     operatorGamepad.y().whileTrue(angleFromAprilTag);
   }

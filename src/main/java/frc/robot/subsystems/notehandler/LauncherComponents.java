@@ -48,7 +48,7 @@ public final class LauncherComponents {
         launcherBottom.setNeutralMode(NeutralModeValue.Coast);
 
         //Zero the launcher when code starts
-        rotateLeft.setPosition(-8);
-        rotateRight.setPosition(-8);
+        rotateLeft.setPosition(-7);
+        rotateRight.setPosition(-7);
     }
 }
