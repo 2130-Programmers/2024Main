@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -163,6 +164,26 @@ public class DriveTrain extends SubsystemBase {
       calculateKinematics(Math.cos(angleDif)*radius*driveMultiplier*-1,
                           Math.sin(angleDif)*radius*driveMultiplier,
                           twist);
+  }
+
+  /**
+   * Set drivetrain to brake
+   */
+  public void brake() {
+    flDriveMotor.setIdleMode(IdleMode.kBrake);
+    frDriveMotor.setIdleMode(IdleMode.kBrake);
+    blDriveMotor.setIdleMode(IdleMode.kBrake);
+    brDriveMotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  /**
+   * Set drivetrain to coast
+   */
+  public void coast() {
+    flDriveMotor.setIdleMode(IdleMode.kCoast);
+    frDriveMotor.setIdleMode(IdleMode.kCoast);
+    blDriveMotor.setIdleMode(IdleMode.kCoast);
+    brDriveMotor.setIdleMode(IdleMode.kCoast);
   }
 
     /**

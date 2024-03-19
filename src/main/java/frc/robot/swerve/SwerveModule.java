@@ -5,7 +5,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -49,7 +48,7 @@ public class SwerveModule {
      * @return - SwerveModulePosition with the encoder values for rotation and translation
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(driveMotor.getEncoder().getPosition(), currentState.getRotation2d());
+        return new SwerveModulePosition(driveMotor.getEncoder().getPosition() * 0.0472867872, currentState.getRotation2d());
     }
 
     /**

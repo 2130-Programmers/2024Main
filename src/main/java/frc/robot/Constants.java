@@ -31,7 +31,7 @@ public final class Constants {
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
     TURN_P_GAIN = .8,
-    AUTO_TRANSLATION_GAIN = .1,
+    AUTO_TRANSLATION_GAIN = .25,
     AUTO_ROTATION_GAIN = .1;
     
   }

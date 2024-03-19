@@ -34,6 +34,8 @@ public class Robot extends TimedRobot {
     new LauncherComponents();
 
     m_robotContainer = new RobotContainer();
+
+    RobotContainer.pdh.setNoteLeds(RobotContainer.launcherIntake.notePresent());
   }
 
   /**
