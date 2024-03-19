@@ -32,8 +32,8 @@ public final class LauncherComponents {
 
     public LauncherComponents() {
         //Set the inversion for each motor so they work together
-        rotateRight.setInverted(true);
-        rotateLeft.setInverted(false);
+        rotateRight.setInverted(false);
+        rotateLeft.setInverted(true);
         launcherTop.setInverted(false);
         launcherBottom.setInverted(true);
         intakeTop.setInverted(false);

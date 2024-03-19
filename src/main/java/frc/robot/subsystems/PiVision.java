@@ -105,14 +105,17 @@ public class PiVision extends SubsystemBase {
       Transform3d targetPosition = speakerCenterTarget.getBestCameraToTarget();
       
       //Pythagorean theorum to get total distance to target
-      return Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
+      double distance =  Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
+      SmartDashboard.putNumber("Distance to speaker", distance);
+      return distance;
     }
+
     return 0;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    estimatePose();
+    // estimatePose();
   }
 }

@@ -20,23 +20,24 @@ public class ZeroHandler extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    noteHandler.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    done = noteHandler.moveToAngle(-2.5);
+    noteHandler.setSetpoint(-2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    noteHandler.setRotatePower(0);
+    noteHandler.stopAngleMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    return noteHandler.getMeasurement() < 0;
   }
 }

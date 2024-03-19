@@ -27,7 +27,9 @@ public class StopHandlerMotors extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    noteHandler.setRotatePower(0);
+    noteHandler.disable();
+    noteHandler.getController().reset();
+    noteHandler.stopAngleMotors();
     launcherIntake.setIntakePower(0);
     launcherWheels.setLaunchPower(0);
   }

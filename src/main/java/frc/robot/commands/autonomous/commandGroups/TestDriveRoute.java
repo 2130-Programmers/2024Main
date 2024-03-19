@@ -19,8 +19,8 @@ public class TestDriveRoute extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GoToLocation(RobotContainer.driveTrain, new Pose2d(10, 10, new Rotation2d(0))),
-      new GoToLocation(RobotContainer.driveTrain, new Pose2d(15, -5, new Rotation2d(Math.PI)))
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d( 2, 2, new Rotation2d(0))),
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(4, -2, new Rotation2d(Math.PI)))
     );
   }
 }

@@ -5,6 +5,7 @@
 package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.notehandler.LauncherIntake;
 
 public class IntakeNote extends Command {
@@ -34,6 +35,7 @@ public class IntakeNote extends Command {
   @Override
   public void end(boolean interrupted) {
     launcherIntake.setIntakePower(0);
+    RobotContainer.pdh.setNoteLeds(true);
   }
 
   // Returns true when the command should end.

@@ -5,7 +5,6 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -26,7 +25,9 @@ public class GoToLocation extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    driveTrain.brake();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -41,19 +42,16 @@ public class GoToLocation extends Command {
     SmartDashboard.putNumber("Position y error", yErr);
     SmartDashboard.putNumber("Position rotation error", rErr);
 
-    driveTrain.calculateKinematics(
-      xErr * Constants.DriveTrainConstants.AUTO_TRANSLATION_GAIN,
-      yErr * Constants.DriveTrainConstants.AUTO_TRANSLATION_GAIN,
-      rErr * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN
-    );
+    driveTrain.altDrive(xErr, yErr, rErr * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN, Constants.DriveTrainConstants.AUTO_TRANSLATION_GAIN);
 
-    done = (xErr < 1 && yErr < 1 && rErr < 1);
+    done = (Math.abs(xErr) < .25 && Math.abs(yErr) < .25 && Math.abs(rErr) < .25);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveTrain.calculateKinematics(0, 0, 0);
+    driveTrain.coast();
   }
 
   // Returns true when the command should end.
