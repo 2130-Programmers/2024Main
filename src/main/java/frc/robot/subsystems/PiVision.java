@@ -83,23 +83,7 @@ public class PiVision extends SubsystemBase {
    * @return the distance in meters from camera to speaker, or 0 if not tracking speaker
    */
   public double getDistanceToTarget() {
-    updatePipelineResult();
-    if(!pipelineResult.hasTargets()) {
-      return 0;
-    }
-    
-    //True if tracking center target on either speaker
-    List<PhotonTrackedTarget> currentTargets = pipelineResult.getTargets();
-    //Will remain null unless the camera is currently tracking the center target on one of the speakers
-    PhotonTrackedTarget speakerCenterTarget = null;
-    for(PhotonTrackedTarget current : currentTargets) {
-      //If tracking the center target, update center target variable
-      if(current.getFiducialId() == 4 || current.getFiducialId() == 7) {
-        speakerCenterTarget = current;
-      }
-    }
-
-
+    PhotonTrackedTarget speakerCenterTarget = getSpeakerTarget();
     if(speakerCenterTarget != null) {
       //Get the position of the target relative to the robot
       Transform3d targetPosition = speakerCenterTarget.getBestCameraToTarget();
@@ -111,6 +95,35 @@ public class PiVision extends SubsystemBase {
     }
 
     return 0;
+  }
+
+  private PhotonTrackedTarget getSpeakerTarget() {
+    updatePipelineResult();
+    
+    //True if tracking center target on either speaker
+    List<PhotonTrackedTarget> currentTargets = pipelineResult.getTargets();
+    //Will remain null unless the camera is currently tracking the center target on one of the speakers
+    PhotonTrackedTarget speakerCenterTarget = null;
+    if(pipelineResult.hasTargets()) {
+      for(PhotonTrackedTarget current : currentTargets) {
+        //If tracking the center target, update center target variable
+        if(current.getFiducialId() == 4 || current.getFiducialId() == 7) {
+          speakerCenterTarget = current;
+          break;
+        }
+      }
+    }
+
+    return speakerCenterTarget;
+  }
+  
+  public double angleToSpeaker() {
+    PhotonTrackedTarget speakerTarget = getSpeakerTarget();
+    if(speakerTarget == null) {
+      return 0;
+    }
+
+    return speakerTarget.getYaw();
   }
 
   @Override

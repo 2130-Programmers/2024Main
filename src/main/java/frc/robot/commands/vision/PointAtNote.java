@@ -4,14 +4,11 @@
 
 package frc.robot.commands.vision;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimelightVision;
-import edu.wpi.first.networktables.NetworkTable;
 
 public class PointAtNote extends Command {
   private DriveTrain driveTrain;

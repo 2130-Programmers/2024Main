@@ -49,7 +49,7 @@ public class RobotContainer {
   private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(launcherAngle, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
   //Autonomous
-  private static final TestDriveRoute testDriveRoute = new TestDriveRoute();
+  private static final ShootNoteAndLeave testDriveRoute = new ShootNoteAndLeave();
 
   // Replace with CommandXboxController or CommandJoystick if needed
     public static final CommandXboxController
