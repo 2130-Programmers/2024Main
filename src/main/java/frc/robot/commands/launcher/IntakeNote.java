@@ -22,7 +22,7 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    launcherIntake.setIntakePower(.25);
+    launcherIntake.setIntakePower(.32);
     done = false;
   }
 

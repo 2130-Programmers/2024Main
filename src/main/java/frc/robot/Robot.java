@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -20,6 +21,9 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private static SendableChooser<String> WALL_CHOOSER, POSITION_CHOOSER;
+  private static final String BLUE_WALL = "Blue Wall", RED_WALL = "Red Wall", LEFT = "Left", CENTER = "Middle", RIGHT = "Right";
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -37,7 +41,14 @@ public class Robot extends TimedRobot {
 
     RobotContainer.pdh.setNoteLeds(RobotContainer.launcherIntake.notePresent());
 
-    SmartDashboard.putNumber("Launcher angle", -8);
+    WALL_CHOOSER.setDefaultOption(BLUE_WALL, BLUE_WALL);
+    WALL_CHOOSER.addOption(RED_WALL, RED_WALL);
+    POSITION_CHOOSER.setDefaultOption(CENTER, CENTER);
+    POSITION_CHOOSER.addOption(LEFT, LEFT);
+    POSITION_CHOOSER.addOption(RIGHT, RIGHT);
+
+    SmartDashboard.putData("Autonomous Selection", WALL_CHOOSER);
+    SmartDashboard.putData("Autonomous Selection", POSITION_CHOOSER);
   }
 
   /**
