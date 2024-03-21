@@ -117,6 +117,10 @@ public class PiVision extends SubsystemBase {
     return speakerCenterTarget;
   }
   
+  /**
+   * Get the angle away from center of the speaker relative to the robot
+   * @return - the angle in degrees, where the right is positive
+   */
   public double angleToSpeaker() {
     PhotonTrackedTarget speakerTarget = getSpeakerTarget();
     if(speakerTarget == null) {
