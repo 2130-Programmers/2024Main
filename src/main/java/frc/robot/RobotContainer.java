@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.notehandler.*;
+import frc.robot.commands.autonomous.InitializeAutonomous;
 import frc.robot.commands.autonomous.commandGroups.*;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.launcher.*;
