@@ -5,7 +5,6 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
@@ -37,10 +36,6 @@ public class GoToLocation extends Command {
     xErr = currentPose.getX() - targetPose.getX(),
     yErr = currentPose.getY() - targetPose.getY(),
     rErr = currentPose.getRotation().getRadians() - targetPose.getRotation().getRadians();
-
-    SmartDashboard.putNumber("Position x error", xErr);
-    SmartDashboard.putNumber("Position y error", yErr);
-    SmartDashboard.putNumber("Position rotation error", rErr);
 
     driveTrain.altDrive(xErr, yErr, rErr * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN, Constants.DriveTrainConstants.AUTO_TRANSLATION_GAIN);
 

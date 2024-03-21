@@ -6,6 +6,7 @@ package frc.robot.subsystems.notehandler;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LauncherWheels extends SubsystemBase {
@@ -42,5 +43,6 @@ public class LauncherWheels extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Launcher At Speed", launcherAtSpeed(4500));
   }
 }

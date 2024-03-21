@@ -79,7 +79,6 @@ public class LauncherAngle extends PIDSubsystem {
   public void moveArmFeedForward(double position, double velocity) {
     //We need basically 1v to get the launcher to move slightly
     double feedforwardValue = armFeedforward.calculate(position, velocity);
-    SmartDashboard.putNumber("Feedforward Value", feedforwardValue);
     setRotateVoltage(feedforwardValue);
   }
 
@@ -118,5 +117,13 @@ public class LauncherAngle extends PIDSubsystem {
     // Return the process variable measurement here
     double encoderAngle = (LauncherComponents.rotateLeft.getPosition().getValueAsDouble() + LauncherComponents.rotateRight.getPosition().getValueAsDouble())/2;
     return encoderAngle * Constants.LauncherConstants.ENCODER_TO_RADIANS;
+  }
+
+  @Override
+  public void periodic() {
+    if (m_enabled) {
+      useOutput(m_controller.calculate(getMeasurement()), getSetpoint());
+    }
+    SmartDashboard.putNumber("Launcher angle", (LauncherComponents.rotateLeft.getPosition().getValueAsDouble() + LauncherComponents.rotateRight.getPosition().getValueAsDouble())/2);
   }
 }

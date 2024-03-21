@@ -79,7 +79,6 @@ public class PiVision extends SubsystemBase {
 
   /**
    * Get the total distance from camera to target
-   * @param target - PhotonTrackedTarget coming from
    * @return the distance in meters from camera to speaker, or 0 if not tracking speaker
    */
   public double getDistanceToTarget() {
