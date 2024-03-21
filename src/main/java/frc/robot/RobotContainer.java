@@ -7,10 +7,13 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.notehandler.*;
+import frc.robot.commands.autonomous.GoToLocation;
 import frc.robot.commands.autonomous.commandGroups.*;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.launcher.*;
 import frc.robot.commands.vision.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,7 +50,7 @@ public class RobotContainer {
   private static final SpinLauncher spinLauncher = new SpinLauncher(launcherWheels);
   private static final LauncherToAmp launcherToAmp = new LauncherToAmp(launcherAngle);
   //Vision
-  private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(launcherAngle, piVision);
+  private static final TeleSpeakerAim angleFromAprilTag = new TeleSpeakerAim(launcherAngle, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
   private static final PointAtSpeaker pointAtSpeaker = new PointAtSpeaker(piVision, driveTrain);
   //Autonomous
@@ -105,5 +108,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return AUTO_CHOOSER.getSelected();
+    // return new GoToLocation(driveTrain, new Pose2d(5, -2, new Rotation2d(0)));
   }
 }

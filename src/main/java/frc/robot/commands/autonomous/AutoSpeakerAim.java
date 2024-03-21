@@ -2,18 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.vision;
+package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PiVision;
 import frc.robot.subsystems.notehandler.LauncherAngle;
 
-public class AngleFromAprilTag extends Command {
+public class AutoSpeakerAim extends Command {
   private final LauncherAngle launcherAngle;
   private final PiVision vision;
   private boolean done;
   /** Creates a new AprilTagLauncher. */
-  public AngleFromAprilTag(LauncherAngle noteHandler, PiVision vision) {
+  public AutoSpeakerAim(LauncherAngle noteHandler, PiVision vision) {
     addRequirements(noteHandler, vision);
     this.launcherAngle = noteHandler;
     this.vision = vision;
@@ -45,6 +45,6 @@ public class AngleFromAprilTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }

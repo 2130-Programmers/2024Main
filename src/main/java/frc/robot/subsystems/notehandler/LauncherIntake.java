@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.notehandler;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LauncherIntake extends SubsystemBase {
