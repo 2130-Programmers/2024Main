@@ -7,11 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.notehandler.*;
-import frc.robot.commands.autonomous.InitializeAutonomous;
 import frc.robot.commands.autonomous.commandGroups.*;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.launcher.*;
 import frc.robot.commands.vision.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -45,26 +46,28 @@ public class RobotContainer {
   private static final LaunchNote launchNote = new LaunchNote(launcherIntake, launcherWheels);
   private static final SpinLauncher spinLauncher = new SpinLauncher(launcherWheels);
   private static final LauncherToAmp launcherToAmp = new LauncherToAmp(launcherAngle);
-  private static final ManualLauncher manualLauncher =  new ManualLauncher(launcherAngle);
   //Vision
   private static final AngleFromAprilTag angleFromAprilTag = new AngleFromAprilTag(launcherAngle, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
+  private static final PointAtSpeaker pointAtSpeaker = new PointAtSpeaker(piVision, driveTrain);
   //Autonomous
-  private static final ShootNoteAndLeave testDriveRoute = new ShootNoteAndLeave();
+  private static final ShootNoteAndLeave shootNoteAndLeave = new ShootNoteAndLeave();
 
   // Replace with CommandXboxController or CommandJoystick if needed
     public static final CommandXboxController
       driverGamepad = new CommandXboxController(OperatorConstants.DRIVER_PORT),
       operatorGamepad = new CommandXboxController(OperatorConstants.OPERATOR_PORT);
 
+  //Autonomous selection for SmartDashboard
+  private static SendableChooser<Command> AUTO_CHOOSER = new SendableChooser<Command>();
+  private static final String BLUE_WALL = "Blue Wall, ", RED_WALL = "Red Wall, ", LEFT = "Left", CENTER = "Middle", RIGHT = "Right";
+
   private void configureBindings() {
     //Driver
     driverGamepad.leftBumper().whileTrue(pointAtNote);
     driverGamepad.rightBumper().whileTrue(altDrive);
     driverGamepad.a().whileTrue(driveStraight);
-    // driverGamepad.y().whileTrue(point at speaker);
-
-
+    driverGamepad.y().whileTrue(pointAtSpeaker);
     
     //Operator
     operatorGamepad.leftBumper().onTrue(intakeNote);
@@ -83,7 +86,15 @@ public class RobotContainer {
 
     //Set default commands(will run when no other command is using subystem)
     driveTrain.setDefaultCommand(teleDriveCommand);
-    // launcherAngle.setDefaultCommand(manualLauncher);
+    
+    AUTO_CHOOSER.setDefaultOption(BLUE_WALL + CENTER, shootNoteAndLeave);
+    AUTO_CHOOSER.addOption(BLUE_WALL + LEFT, shootNoteAndLeave);
+    AUTO_CHOOSER.addOption(BLUE_WALL + RIGHT, shootNoteAndLeave);
+    AUTO_CHOOSER.addOption(RED_WALL + LEFT, shootNoteAndLeave);
+    AUTO_CHOOSER.addOption(RED_WALL + CENTER, shootNoteAndLeave);
+    AUTO_CHOOSER.addOption(RED_WALL + RIGHT, shootNoteAndLeave);
+
+    SmartDashboard.putData("Autonomous Selection", AUTO_CHOOSER);
   }
 
   /**
@@ -93,6 +104,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return AUTO_CHOOSER.getSelected();
   }
 }

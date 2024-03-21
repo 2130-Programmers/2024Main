@@ -22,9 +22,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private static SendableChooser<String> WALL_CHOOSER = new SendableChooser<String>(), POSITION_CHOOSER = new SendableChooser<String>();
-  private static final String BLUE_WALL = "Blue Wall", RED_WALL = "Red Wall", LEFT = "Left", CENTER = "Middle", RIGHT = "Right";
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -40,15 +37,6 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     RobotContainer.pdh.setNoteLeds(RobotContainer.launcherIntake.notePresent());
-
-    WALL_CHOOSER.setDefaultOption(BLUE_WALL, BLUE_WALL);
-    WALL_CHOOSER.addOption(RED_WALL, RED_WALL);
-    POSITION_CHOOSER.setDefaultOption(CENTER, CENTER);
-    POSITION_CHOOSER.addOption(LEFT, LEFT);
-    POSITION_CHOOSER.addOption(RIGHT, RIGHT);
-
-    SmartDashboard.putData("Autonomous Selection", WALL_CHOOSER);
-    SmartDashboard.putData("Autonomous Selection", POSITION_CHOOSER);
   }
 
   /**
@@ -79,8 +67,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    if(m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
   }
@@ -98,7 +85,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    SmartDashboard.putNumber("Limelight P Gain", 0);
   }
 
   /** This function is called periodically during operator control. */

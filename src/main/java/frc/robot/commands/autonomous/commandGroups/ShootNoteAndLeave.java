@@ -6,9 +6,13 @@ package frc.robot.commands.autonomous.commandGroups;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.commands.autonomous.GoToLocation;
+import frc.robot.commands.launcher.LaunchNote;
+import frc.robot.commands.vision.AngleFromAprilTag;
+import frc.robot.commands.vision.PointAtSpeaker;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,8 +23,15 @@ public class ShootNoteAndLeave extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GoToLocation(RobotContainer.driveTrain, new Pose2d( 2, 2, new Rotation2d(0))),
-      new GoToLocation(RobotContainer.driveTrain, new Pose2d(4, -2, new Rotation2d(Math.PI)))
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(0, 0, new Rotation2d(Math.PI))),
+      new ParallelRaceGroup(
+        new PointAtSpeaker(RobotContainer.piVision, RobotContainer.driveTrain),
+        new SequentialCommandGroup(
+          new AngleFromAprilTag(RobotContainer.launcherAngle, RobotContainer.piVision),
+          new LaunchNote(RobotContainer.launcherIntake, RobotContainer.launcherWheels)
+        )
+      ),
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(0, -5, new Rotation2d(Math.PI)))
     );
   }
 }
