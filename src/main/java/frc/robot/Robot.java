@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private static SendableChooser<String> WALL_CHOOSER, POSITION_CHOOSER;
+  private static SendableChooser<String> WALL_CHOOSER = new SendableChooser<String>(), POSITION_CHOOSER = new SendableChooser<String>();
   private static final String BLUE_WALL = "Blue Wall", RED_WALL = "Red Wall", LEFT = "Left", CENTER = "Middle", RIGHT = "Right";
 
   /**
