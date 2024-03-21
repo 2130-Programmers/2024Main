@@ -92,6 +92,7 @@ public class LauncherAngle extends PIDSubsystem {
     if(distanceToTarget >= launchAngles.length - 1) {
       stopAngleMotors();
     } else {
+      SmartDashboard.putNumber("Setpoint/Distance", (int)Math.round(distanceToTarget));
       setSetpoint(launchAngles[(int)Math.round(distanceToTarget)]);
     }
   }

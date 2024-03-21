@@ -22,6 +22,11 @@ public class LauncherWheels extends SubsystemBase {
     return (LauncherComponents.launcherBottom.getRotorVelocity().getValueAsDouble() * 60 >= rpm) && (LauncherComponents.launcherTop.getRotorVelocity().getValueAsDouble() * 60 >= rpm);
   }
 
+
+  private double launcherSpeed() {
+    return (LauncherComponents.launcherBottom.getRotorVelocity().getValueAsDouble() * 30 + LauncherComponents.launcherTop.getRotorVelocity().getValueAsDouble() * 30);
+  }
+
   /**
    * Set the power of launcher motors - positive moves the note in
    * @param power - double, from -1 to 1
@@ -43,6 +48,7 @@ public class LauncherWheels extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Launcher At Speed", launcherAtSpeed(4500));
+    SmartDashboard.putBoolean("Launcher At Speed", launcherAtSpeed(5800));
+    SmartDashboard.putNumber("Launcher Speed", launcherSpeed());
   }
 }

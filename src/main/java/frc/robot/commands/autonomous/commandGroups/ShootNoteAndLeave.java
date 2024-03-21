@@ -26,8 +26,8 @@ public class ShootNoteAndLeave extends SequentialCommandGroup {
       // new GoToLocation(RobotContainer.driveTrain, new Pose2d(0, 0, new Rotation2d(Math.PI))),
       new PointAtSpeaker(RobotContainer.piVision, RobotContainer.driveTrain),
       new AngleFromAprilTag(RobotContainer.launcherAngle, RobotContainer.piVision),
-      new LaunchNote(RobotContainer.launcherIntake, RobotContainer.launcherWheels)
-      // new GoToLocation(RobotContainer.driveTrain, new Pose2d(0, -5, new Rotation2d(Math.PI)))
+      new LaunchNote(RobotContainer.launcherIntake, RobotContainer.launcherWheels),
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(2, 5, new Rotation2d(Math.PI)))
     );
   }
 }
