@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.notehandler.LauncherComponents;
@@ -34,7 +35,6 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer();
 
-    RobotContainer.pdh.setNoteLeds(RobotContainer.launcherIntake.notePresent());
   }
 
   /**
@@ -83,6 +83,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    SmartDashboard.putNumber("Launcher Manual Set Angle", -1);
   }
 
   /** This function is called periodically during operator control. */

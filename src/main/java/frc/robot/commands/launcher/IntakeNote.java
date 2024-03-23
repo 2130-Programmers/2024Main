@@ -22,7 +22,7 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    launcherIntake.setIntakePower(.32);
+    launcherIntake.setIntakePower(.25);
     done = false;
   }
 
@@ -36,7 +36,6 @@ public class IntakeNote extends Command {
   @Override
   public void end(boolean interrupted) {
     launcherIntake.setIntakePower(0);
-    RobotContainer.pdh.setNoteLeds(true);
   }
 
   // Returns true when the command should end.

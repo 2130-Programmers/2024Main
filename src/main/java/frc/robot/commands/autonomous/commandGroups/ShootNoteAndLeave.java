@@ -9,9 +9,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.commands.autonomous.AutoSpeakerAim;
+import frc.robot.commands.autonomous.AutoSpinLauncher;
 import frc.robot.commands.autonomous.GoToLocation;
 import frc.robot.commands.launcher.LaunchNote;
-import frc.robot.commands.vision.PointAtSpeaker;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -23,10 +23,11 @@ public class ShootNoteAndLeave extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // new GoToLocation(RobotContainer.driveTrain, new Pose2d(0, 0, new Rotation2d(Math.PI))),
-      new PointAtSpeaker(RobotContainer.piVision, RobotContainer.driveTrain),
+      // new PointAtSpeaker(RobotContainer.piVision, RobotContainer.driveTrain),
       new AutoSpeakerAim(RobotContainer.launcherAngle, RobotContainer.piVision),
+      new AutoSpinLauncher(RobotContainer.launcherWheels),
       new LaunchNote(RobotContainer.launcherIntake, RobotContainer.launcherWheels),
-      new GoToLocation(RobotContainer.driveTrain, new Pose2d(2, 5, new Rotation2d(Math.PI)))
+      new GoToLocation(RobotContainer.driveTrain, new Pose2d(0, -5, new Rotation2d(0)))
     );
   }
 }

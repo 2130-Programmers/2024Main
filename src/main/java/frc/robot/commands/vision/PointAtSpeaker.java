@@ -13,7 +13,6 @@ public class PointAtSpeaker extends Command {
   private PiVision vision;
   private DriveTrain driveTrain;
   private double angleError;
-  private boolean done;
   /** Creates a new PointAtAprilTag. */
   public PointAtSpeaker(PiVision vision, DriveTrain driveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -24,16 +23,13 @@ public class PointAtSpeaker extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    done = false;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     angleError = vision.angleToSpeaker();
-    done = Math.abs(angleError) < 5;
-    driveTrain.calculateKinematics(RobotContainer.driverGamepad.getLeftX(),  RobotContainer.driverGamepad.getLeftY(), angleError * .0125);
+    driveTrain.calculateKinematics(RobotContainer.driverGamepad.getLeftX() * -1,  RobotContainer.driverGamepad.getLeftY(), angleError * .005);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +39,6 @@ public class PointAtSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    return false;
   }
 }

@@ -31,13 +31,13 @@ public final class Constants {
     PEAK_DRIVE_POWER = 1,
     PEAK_TURN_POWER = 1,
     TURN_P_GAIN = .8,
-    AUTO_TRANSLATION_GAIN = .25,
+    AUTO_TRANSLATION_GAIN = .4,
     AUTO_ROTATION_GAIN = .1;
     
   }
 
   public static class VisionConstants {
-    public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(new Translation3d(.381, 0, .4699), new Rotation3d(0, .262, 0));
+    public static final Transform3d CAMERA_RELATIVE_TO_ROBOT = new Transform3d(new Translation3d(0, .381, .4699), new Rotation3d(0, .262, 0));
     public static final Pose3d BLUE_AMP = new Pose3d(), RED_AMP = new Pose3d(), BLUE_SPEAKER = new Pose3d(), RED_SPEAKER = new Pose3d();
   }
 
@@ -45,11 +45,13 @@ public final class Constants {
     public static final double
     ENCODER_TO_RADIANS = 0.139105,
     RADIANS_TO_ENCODER = 7.196722,
+    METERS_TO_FEET = 3.28084,
     LAUNCH_POWER = 1,
     ANGLE_POWER = .35,
     ANGLE_DEADZONE = .1,
     INTAKE_POWER = 1,
     LAUNCHER_MAX_ANGLE = 1;
     
+    public static final int TARGET_LAUNCH_SPEED = 5800;
   }
 }

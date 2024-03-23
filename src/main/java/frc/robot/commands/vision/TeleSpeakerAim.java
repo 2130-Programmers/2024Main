@@ -21,14 +21,13 @@ public class TeleSpeakerAim extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    launcherAngle.getController().reset();
     launcherAngle.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // launcherAngle.angleFromDistance(vision.getDistanceToTarget());
+    // launcherAngle.setSetpoint(SmartDashboard.getNumber("Launcher Manual Set Angle", -1));
     launcherAngle.angleFromDistance(vision.getDistanceToTarget());
   }
 

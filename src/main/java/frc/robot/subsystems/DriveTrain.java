@@ -80,6 +80,16 @@ public class DriveTrain extends SubsystemBase {
     );
   }
 
+  /**
+   * Move the modules to a position that locks the robot in place
+   */
+  public void lockModules() {
+    flModule.calcDrive(new SwerveVector(0, 0));
+    flModule.calcDrive(new SwerveVector(Math.PI/2, 0));
+    flModule.calcDrive(new SwerveVector(0, 0));
+    flModule.calcDrive(new SwerveVector(Math.PI/2, 0));
+  }
+
   //Assuming robot is square
   private static final double moduleDistFromCenter = Math.sqrt(Math.pow(Constants.DriveTrainConstants.BOT_LENGTH, 2) * 2);
 

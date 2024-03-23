@@ -6,8 +6,11 @@ package frc.robot.subsystems.notehandler;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class LauncherWheels extends SubsystemBase {
   /** Creates a new LauncherWheels. */
@@ -28,7 +31,7 @@ public class LauncherWheels extends SubsystemBase {
   }
 
   /**
-   * Set the power of launcher motors - positive moves the note in
+   * Set the power of launcher motors
    * @param power - double, from -1 to 1
    */
   public void setLaunchPower(double power) {
@@ -48,7 +51,9 @@ public class LauncherWheels extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Launcher At Speed", launcherAtSpeed(5800));
+    boolean atSpeed = launcherAtSpeed(Constants.LauncherConstants.TARGET_LAUNCH_SPEED);
+    SmartDashboard.putBoolean("Launcher At Speed", atSpeed);
+    RobotContainer.operatorGamepad.getHID().setRumble(RumbleType.kBothRumble, atSpeed ? 1 : 0);
     SmartDashboard.putNumber("Launcher Speed", launcherSpeed());
   }
 }

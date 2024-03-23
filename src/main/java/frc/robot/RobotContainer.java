@@ -7,16 +7,14 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.notehandler.*;
-import frc.robot.commands.autonomous.GoToLocation;
 import frc.robot.commands.autonomous.commandGroups.*;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.launcher.*;
 import frc.robot.commands.vision.*;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
@@ -48,11 +46,15 @@ public class RobotContainer {
   private static final StopHandlerMotors stopNoteHandlerMotors = new StopHandlerMotors(launcherAngle, launcherWheels, launcherIntake);
   private static final LaunchNote launchNote = new LaunchNote(launcherIntake, launcherWheels);
   private static final SpinLauncher spinLauncher = new SpinLauncher(launcherWheels);
+  private static final SpinLauncherForAmp spinLauncherForAmp = new SpinLauncherForAmp(launcherWheels);
   private static final LauncherToAmp launcherToAmp = new LauncherToAmp(launcherAngle);
+  private static final AmpSequentialCommand ampSequentialCommand = new AmpSequentialCommand();
   //Vision
   private static final TeleSpeakerAim angleFromAprilTag = new TeleSpeakerAim(launcherAngle, piVision);
   private static final PointAtNote pointAtNote = new PointAtNote(driveTrain, limelightVision);
   private static final PointAtSpeaker pointAtSpeaker = new PointAtSpeaker(piVision, driveTrain);
+  //Gyro
+  private static final ZeroGyro zeroGyro = new ZeroGyro(gyro);
   //Autonomous
   private static final ShootNoteAndLeave shootNoteAndLeave = new ShootNoteAndLeave();
 
@@ -70,12 +72,14 @@ public class RobotContainer {
     driverGamepad.leftBumper().whileTrue(pointAtNote);
     driverGamepad.rightBumper().whileTrue(altDrive);
     driverGamepad.a().whileTrue(driveStraight);
+    driverGamepad.x().onTrue(ampSequentialCommand);
     driverGamepad.y().whileTrue(pointAtSpeaker);
     
     //Operator
     operatorGamepad.leftBumper().onTrue(intakeNote);
     operatorGamepad.rightBumper().onTrue(launchNote);
     operatorGamepad.povUp().onTrue(spinLauncher);
+    operatorGamepad.povRight().onTrue(ampSequentialCommand);
     operatorGamepad.a().onTrue(zeroHandler);
     operatorGamepad.b().whileTrue(stopNoteHandlerMotors);
     operatorGamepad.x().whileTrue(launcherToAmp);

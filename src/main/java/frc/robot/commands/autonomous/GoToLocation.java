@@ -39,7 +39,7 @@ public class GoToLocation extends Command {
 
     driveTrain.altDrive(xErr, yErr, rErr * Constants.DriveTrainConstants.AUTO_ROTATION_GAIN, Constants.DriveTrainConstants.AUTO_TRANSLATION_GAIN);
 
-    done = (Math.abs(xErr) < .25 && Math.abs(yErr) < .25 && Math.abs(rErr) < .25);
+    done = (Math.abs(xErr) < .1 && Math.abs(yErr) < .1 && Math.abs(rErr) < .25);
   }
 
   // Called once the command ends or is interrupted.

@@ -56,7 +56,7 @@ public class PiVision extends SubsystemBase {
    */
   public Pose3d estimatePose() {
     updatePipelineResult();
-    poseEstimator.setLastPose(robotPose);
+    poseEstimator.setLastPose(RobotContainer.driveTrain.driveOdometry.getEstimatedPosition());
     Optional<EstimatedRobotPose> optionalPose = poseEstimator.update();
     if(pipelineResult.hasTargets()) {
       try {    
@@ -75,7 +75,7 @@ public class PiVision extends SubsystemBase {
 
   /**
    * Get the total distance from camera to target
-   * @return the distance in meters from camera to speaker, or 0 if not tracking speaker
+   * @return the distance in feet from camera to speaker, or 0 if not tracking speaker
    */
   public double getDistanceToTarget() {
     PhotonTrackedTarget speakerCenterTarget = getSpeakerTarget();
@@ -86,12 +86,16 @@ public class PiVision extends SubsystemBase {
       //Pythagorean theorum to get total distance to target
       double distance =  Math.sqrt(targetPosition.getY() * targetPosition.getY() + targetPosition.getX() * targetPosition.getX());
       SmartDashboard.putNumber("Distance to speaker", distance);
-      return distance;
+      return distance * Constants.LauncherConstants.METERS_TO_FEET - 3;
     }
 
     return 0;
   }
 
+  /**
+   * Get the center target on either speaker
+   * @return - PhotonTrackedTarget, or null if neither center target is currently tracked
+   */
   private PhotonTrackedTarget getSpeakerTarget() {
     updatePipelineResult();
     
@@ -128,6 +132,6 @@ public class PiVision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // estimatePose();
+    estimatePose();
   }
 }

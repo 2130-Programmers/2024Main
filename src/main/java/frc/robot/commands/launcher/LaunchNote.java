@@ -45,7 +45,6 @@ public class LaunchNote extends Command {
   public void end(boolean interrupted) {
     launcherIntake.setIntakePower(0);
     launcherWheels.setLaunchPower(0);
-    RobotContainer.pdh.setNoteLeds(false);
   }
 
   // Returns true when the command should end.

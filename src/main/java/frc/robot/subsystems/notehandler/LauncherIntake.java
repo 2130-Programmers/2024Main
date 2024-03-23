@@ -4,7 +4,11 @@
 
 package frc.robot.subsystems.notehandler;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.RobotCentric;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class LauncherIntake extends SubsystemBase {
   /** Creates a new LauncherIntake. */
@@ -30,5 +34,7 @@ public class LauncherIntake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Note switches", notePresent());
+    RobotContainer.pdh.setNoteLeds(notePresent());
   }
 }

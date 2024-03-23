@@ -35,7 +35,9 @@ public class LauncherAngle extends PIDSubsystem {
   public LauncherAngle() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(1.5, 0, .05));
+        new PIDController(1, 0, .01));
+      
+      getController().setTolerance(.1);
       try {
         fileReader = new BufferedReader(new FileReader(Filesystem.getDeployDirectory().getAbsolutePath() + "/launcherPositions.csv"));
       } catch (FileNotFoundException fileNotFoundException) {
@@ -44,7 +46,7 @@ public class LauncherAngle extends PIDSubsystem {
       }
 
       try {
-        launchAngles = new double[20];
+        launchAngles = new double[13];
 
         String line;
         while((line = fileReader.readLine()) != null) {
@@ -89,7 +91,7 @@ public class LauncherAngle extends PIDSubsystem {
   public void angleFromDistance(double distanceToTarget) {
     //Move to point in a line directly at the speaker(6ft off the ground)
     //Then add a small amount of extra angle that scales with distance from the target
-    if(distanceToTarget >= launchAngles.length - 1) {
+    if(distanceToTarget > launchAngles.length - 1) {
       stopAngleMotors();
     } else {
       SmartDashboard.putNumber("Setpoint/Distance", (int)Math.round(distanceToTarget));
@@ -108,7 +110,7 @@ public class LauncherAngle extends PIDSubsystem {
 
   @Override
   public void useOutput(double output, double setpoint) {
-    MathUtil.clamp(output, -0.25, 0.5);
+    MathUtil.clamp(output, -0.05, 0.2);
     // Use the output here
     moveArmFeedForward(setpoint, output);
   }
