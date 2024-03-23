@@ -108,9 +108,17 @@ public class LauncherAngle extends PIDSubsystem {
     LauncherComponents.rotateRight.setControl(new VoltageOut(volts));
   }
 
+  /**
+   * Get the position of the launcher
+   * @return - the position of the launcher in encoder ticks
+   */
+  public double getEncoderAngle() {
+    return (LauncherComponents.rotateLeft.getPosition().getValueAsDouble() + LauncherComponents.rotateRight.getPosition().getValueAsDouble())/2;
+  }
+
   @Override
   public void useOutput(double output, double setpoint) {
-    MathUtil.clamp(output, -0.05, 0.2);
+    MathUtil.clamp(output, -0.02, 0.2);
     // Use the output here
     moveArmFeedForward(setpoint, output);
   }

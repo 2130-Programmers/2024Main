@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.notehandler.LauncherAngle;
 
 public class ZeroHandler extends Command {
-  private LauncherAngle noteHandler;
+  private final LauncherAngle noteHandler;
   /** Creates a new ZeroLauncher. */
   public ZeroHandler(LauncherAngle noteHandler) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -19,14 +19,12 @@ public class ZeroHandler extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    noteHandler.enable();
+    noteHandler.setRotateVoltage(-.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    noteHandler.setSetpoint(-2);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -37,6 +35,6 @@ public class ZeroHandler extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return noteHandler.getMeasurement() < 0;
+    return noteHandler.getEncoderAngle() < .75;
   }
 }
